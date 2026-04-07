@@ -33,6 +33,10 @@ export function TaskQueue() {
   );
 
   const handleApprove = async (taskId: string) => {
+    if (!confirm('Are you sure you want to approve this task? This action will be logged.')) {
+      return;
+    }
+    
     try {
       const response = await fetch(`/api/tasks/${taskId}/approve`, {
         method: 'POST',
@@ -45,10 +49,15 @@ export function TaskQueue() {
       );
     } catch (err) {
       console.error('Approval failed:', err);
+      alert('Failed to approve task. Please try again.');
     }
   };
 
   const handleReject = async (taskId: string) => {
+    if (!confirm('Are you sure you want to reject this task? This action will be logged.')) {
+      return;
+    }
+    
     try {
       const response = await fetch(`/api/tasks/${taskId}/reject`, {
         method: 'POST',
@@ -59,6 +68,7 @@ export function TaskQueue() {
       );
     } catch (err) {
       console.error('Rejection failed:', err);
+      alert('Failed to reject task. Please try again.');
     }
   };
 
@@ -141,8 +151,11 @@ export function TaskQueue() {
               <div className="flex items-center justify-between mt-3">
                 <div className="text-xs text-gray-500 dark:text-gray-400">
                   <span className="capitalize">{task.priority}</span> priority
+                  {task.identifier && (
+                    <span className="ml-2">• {task.identifier}</span>
+                  )}
                   {task.assigneeAgentId && (
-                    <span className="ml-2">• Assigned to agent</span>
+                    <span className="ml-2">• Agent</span>
                   )}
                 </div>
 
@@ -161,6 +174,18 @@ export function TaskQueue() {
                       Reject
                     </button>
                   </div>
+                )}
+                
+                {task.status === 'completed' && (
+                  <span className="text-xs text-green-600 dark:text-green-400">
+                    ✓ Completed
+                  </span>
+                )}
+                
+                {task.status === 'rejected' && (
+                  <span className="text-xs text-red-600 dark:text-red-400">
+                    ✗ Cancelled
+                  </span>
                 )}
               </div>
             </div>

@@ -132,7 +132,7 @@ export function SystemMonitor() {
 
       {/* Metrics */}
       <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-3 gap-4 text-sm">
           <div>
             <span className="text-gray-500 dark:text-gray-400">Uptime:</span>
             <span className="ml-2 text-gray-800 dark:text-gray-200 font-medium">
@@ -145,6 +145,14 @@ export function SystemMonitor() {
               {(health.errorRate * 100).toFixed(2)}%
             </span>
           </div>
+          {health.paperclipVersion && (
+            <div>
+              <span className="text-gray-500 dark:text-gray-400">Paperclip:</span>
+              <span className="ml-2 text-gray-800 dark:text-gray-200 font-medium">
+                v{health.paperclipVersion}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>

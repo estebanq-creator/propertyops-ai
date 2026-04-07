@@ -1,12 +1,22 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import { JWT } from 'next-auth/jwt';
+import NextAuth from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
+import { UserRole } from '@/types';
 
-export const authOptions: NextAuthOptions = {
+// Extended user type with RBAC fields
+interface ExtendedUser {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  propertyIds: string[];
+  landlordId?: string;
+}
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    {
+    Credentials({
       id: 'propertyops',
       name: 'PropertyOpsAI',
-      type: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
@@ -15,33 +25,44 @@ export const authOptions: NextAuthOptions = {
         // TODO: Replace with actual auth against Paperclip API or user store
         // For now, accept any non-empty credentials for development
         if (credentials?.email && credentials?.password) {
-          return {
+          const user: ExtendedUser = {
             id: '1',
             email: credentials.email as string,
             name: credentials.email as string,
             role: 'owner',
+            propertyIds: [], // Owner has access to all, no need to list
+            landlordId: undefined,
           };
+          return user;
         }
         return null;
       },
-    },
+    }),
   ],
   session: {
     strategy: 'jwt',
     maxAge: parseInt(process.env.AUTH_SESSION_MAX_AGE || '86400', 10), // 24 hours
   },
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user?: any }) {
+    async jwt({ token, user }: { token: any; user?: any }) {
       if (user) {
         token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
         token.role = user.role;
+        token.propertyIds = user.propertyIds;
+        token.landlordId = user.landlordId;
       }
       return token;
     },
-    async session({ session, token }: { session: any; token: JWT }) {
+    async session({ session, token }: { session: any; token: any }) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.role = token.role as string;
+        session.user.email = token.email as string;
+        session.user.name = token.name as string;
+        session.user.role = token.role as UserRole;
+        session.user.propertyIds = token.propertyIds as string[] || [];
+        session.user.landlordId = token.landlordId as string | undefined;
       }
       return session;
     },
@@ -53,6 +74,4 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.AUTH_SECRET,
   trustHost: process.env.AUTH_TRUST_HOST === 'true',
-};
-
-export const handler = NextAuth(authOptions);
+});

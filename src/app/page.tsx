@@ -1,45 +1,64 @@
-import { SystemMonitor } from '@/components/system-monitor/SystemMonitor';
-import { TaskQueue } from '@/components/task-queue/TaskQueue';
-import { getServerSession } from 'next-auth';
-import { redirect } from 'next/navigation';
-import { authOptions } from '@/lib/auth';
+'use client';
 
-export default async function Dashboard() {
-  const session = await getServerSession(authOptions);
-  
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { UserRole } from '@/types';
 
+/**
+ * Root page - redirects to appropriate dashboard based on user role
+ */
+export default function RootPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function checkAuthAndRedirect() {
+      try {
+        // Fetch session to determine role
+        const response = await fetch('/api/auth/session');
+        const session = await response.json();
+        
+        if (!session?.user) {
+          // Not authenticated - redirect to signin
+          router.push('/auth/signin?callbackUrl=/');
+          return;
+        }
+        
+        const role = session.user.role as UserRole;
+        
+        // Redirect based on role
+        switch (role) {
+          case 'owner':
+            router.push('/owner');
+            break;
+          case 'landlord':
+            router.push('/landlord');
+            break;
+          case 'tenant':
+            router.push('/tenant');
+            break;
+          default:
+            // Default to tenant (most restrictive)
+            router.push('/tenant');
+        }
+      } catch (error) {
+        console.error('Failed to check auth:', error);
+        // On error, redirect to signin
+        router.push('/auth/signin');
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    checkAuthAndRedirect();
+  }, [router]);
+
+  // Loading state
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto px-4 py-8">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            PropertyOpsAI Control Panel
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
-            Welcome back, {session.user?.name || session.user?.email}
-          </p>
-        </header>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* System Health Overview */}
-          <section>
-            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
-              System Health
-            </h2>
-            <SystemMonitor />
-          </section>
-
-          {/* Task Queue Overview */}
-          <section>
-            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
-              Task Queue
-            </h2>
-            <TaskQueue />
-          </section>
-        </div>
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
+        <p className="text-gray-600 dark:text-gray-400">Loading...</p>
       </div>
     </main>
   );

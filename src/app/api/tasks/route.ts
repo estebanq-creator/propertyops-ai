@@ -1,56 +1,64 @@
 import { NextResponse } from 'next/server';
-import { Task } from '@/types';
-
-// Mock data - will be replaced with actual Paperclip API calls
-const MOCK_TASKS: Task[] = [
-  {
-    id: '1',
-    title: 'Review tenant application - 123 Main St',
-    status: 'pending',
-    priority: 'high',
-    assigneeAgentId: 'laura-123',
-    createdAt: new Date(Date.now() - 3600000).toISOString(),
-    updatedAt: new Date().toISOString(),
-    description: 'Laura flagged income verification anomaly',
-  },
-  {
-    id: '2',
-    title: 'Approve maintenance vendor - ABC Plumbing',
-    status: 'pending',
-    priority: 'medium',
-    assigneeAgentId: 'ops-456',
-    createdAt: new Date(Date.now() - 7200000).toISOString(),
-    updatedAt: new Date().toISOString(),
-    description: 'New vendor onboarding requires approval',
-  },
-  {
-    id: '3',
-    title: 'Weekly competitive briefing review',
-    status: 'approved',
-    priority: 'medium',
-    assigneeAgentId: 'intel-789',
-    createdAt: new Date(Date.now() - 86400000).toISOString(),
-    updatedAt: new Date(Date.now() - 43200000).toISOString(),
-    approvedAt: new Date(Date.now() - 43200000).toISOString(),
-    approvedBy: 'David',
-    description: 'Intel agent completed weekly briefing',
-  },
-];
+import { Task, UserRole } from '@/types';
+import { getIssues, mapIssueToTask } from '@/lib/paperclip';
+import { auth } from '@/lib/auth';
+import { filterAccessibleProperties } from '@/lib/rbac';
 
 export async function GET() {
   try {
-    // TODO: Replace with actual Paperclip API call
-    // const response = await fetch(`${process.env.PAPERCLIP_API_URL}/tasks`, {
-    //   headers: { Authorization: `Bearer ${process.env.PAPERCLIP_API_KEY}` },
-    // });
-    // const tasks = await response.json();
-
-    return NextResponse.json(MOCK_TASKS);
+    // Get authenticated user
+    const session = await auth();
+    
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+    
+    const userRole = (session.user as any).role as UserRole;
+    const userPropertyIds = (session.user as any).propertyIds as string[] || [];
+    
+    // Fetch issues from Paperclip API
+    const issuesData = await getIssues({ limit: 50 });
+    
+    // Map issues to our internal Task format
+    let tasks: Task[] = issuesData.map((issue) => ({
+      ...mapIssueToTask(issue),
+      identifier: issue.identifier,
+      labels: issue.labels,
+      assigneeUserId: issue.assigneeUserId,
+      startedAt: issue.startedAt,
+      completedAt: issue.completedAt,
+      cancelledAt: issue.cancelledAt,
+    }));
+    
+    // Apply property scoping based on user role
+    // Note: In Phase 2, tasks don't have propertyIds yet
+    // This is a placeholder for future property-scoped task filtering
+    if (userRole !== 'owner') {
+      // For landlord/tenant, filter tasks by property access
+      // TODO: When tasks have propertyIds, filter here:
+      // tasks = tasks.filter(task => canAccessProperty(userRole, userPropertyIds, task.propertyId));
+      
+      // For now, non-owner users see all tasks (will be restricted when property data is available)
+      console.log(`RBAC: User with role ${userRole} accessing tasks, propertyIds: ${userPropertyIds.join(', ')}`);
+    }
+    
+    return NextResponse.json(tasks);
   } catch (error) {
     console.error('Failed to fetch tasks:', error);
+    
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch tasks';
+    const isAuthError = errorMessage.includes('401') || errorMessage.includes('403');
+    const isNetworkError = errorMessage.includes('network') || errorMessage.includes('timeout');
+    
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to fetch tasks' },
-      { status: 500 }
+      { 
+        error: errorMessage,
+        errorType: isAuthError ? 'AUTH' : isNetworkError ? 'NETWORK' : 'UNKNOWN',
+      },
+      { status: isAuthError ? 401 : isNetworkError ? 503 : 500 }
     );
   }
 }
