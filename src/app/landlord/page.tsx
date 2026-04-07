@@ -1,12 +1,51 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { DisclaimerFooter, CompactDisclaimer } from '@/components/legal/DisclaimerFooter';
+
+interface ForensicReport {
+  id: string;
+  propertyId: string;
+  tenantName: string;
+  documentType: string;
+  anomalies: {
+    type: string;
+    severity: 'low' | 'medium' | 'high';
+    evidence: string;
+    location: string;
+  }[];
+  createdAt: string;
+  reviewedAt?: string;
+}
 
 type View = 'dashboard' | 'documents' | 'properties';
 
 export default function LandlordDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentView, setCurrentView] = useState<View>('dashboard');
+  const [loading, setLoading] = useState(true);
+  const [reports, setReports] = useState<ForensicReport[]>([]);
+  const [meta, setMeta] = useState<any>(null);
+
+  useEffect(() => {
+    fetchReports();
+  }, []);
+
+  const fetchReports = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/landlord/reports');
+      const data = await response.json();
+      if (data.success) {
+        setReports(data.data);
+        setMeta(data.meta);
+      }
+    } catch (error) {
+      console.error('Failed to fetch reports:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const navItems: { id: View; label: string }[] = [
     { id: 'dashboard', label: 'Dashboard' },
@@ -23,19 +62,40 @@ export default function LandlordDashboard() {
               <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
                 Welcome to Laura Portal
               </h2>
+              <CompactDisclaimer />
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 Forensic Document Integrity Reports for your properties.
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">0</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Properties</div>
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    {meta?.reviewGate?.validated || 0}
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Reports Validated</div>
                 </div>
                 <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">0</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Documents Reviewed</div>
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                    {reports.length}
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Approved Reports</div>
                 </div>
               </div>
+              {meta?.reviewGate && (
+                <div className="mt-4">
+                  <div className="flex justify-between mb-2 text-sm">
+                    <span className="text-gray-700 dark:text-gray-300">Review Gate Progress</span>
+                    <span className="text-gray-700 dark:text-gray-300">
+                      {meta.reviewGate.validated} / {meta.reviewGate.totalRequired}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full transition-all"
+                      style={{ width: `${(meta.reviewGate.validated / meta.reviewGate.totalRequired) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
             </section>
             
             <section className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
@@ -43,7 +103,11 @@ export default function LandlordDashboard() {
                 Recent Activity
               </h2>
               <div className="text-gray-500 dark:text-gray-400 text-sm">
-                No recent activity. Document reports will appear here when tenant onboarding documents are uploaded.
+                {reports.length > 0 ? (
+                  <p>{reports.length} approved report(s) available for review.</p>
+                ) : (
+                  <p>No approved reports yet. Documents are being reviewed by Mission Control.</p>
+                )}
               </div>
             </section>
           </div>
@@ -55,22 +119,92 @@ export default function LandlordDashboard() {
             <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
               Forensic Document Integrity Reports
             </h2>
-            <div className="text-gray-500 dark:text-gray-400">
-              <p className="mb-4">
-                Laura analyzes tenant onboarding documents for anomalies and integrity issues.
-              </p>
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 p-4 rounded">
-                <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                  <strong>Note:</strong> Laura provides forensic analysis only — no scoring or screening recommendations. 
-                  All anomaly flags require human review.
-                </p>
+            <CompactDisclaimer />
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Laura analyzes tenant onboarding documents for anomalies and integrity issues.
+              All reports below have been validated by Mission Control.
+            </p>
+            
+            {loading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="text-gray-500 dark:text-gray-400 mt-2">Loading reports...</p>
               </div>
+            ) : reports.length === 0 ? (
               <div className="mt-6 text-center py-8">
                 <div className="text-gray-400 dark:text-gray-500">
-                  No documents pending review
+                  No approved reports yet
                 </div>
+                <p className="text-sm mt-2 text-gray-500 dark:text-gray-400">
+                  Documents uploaded for your properties will appear here after review.
+                </p>
               </div>
-            </div>
+            ) : (
+              <div className="mt-6 space-y-4">
+                {reports.map((report) => (
+                  <div
+                    key={report.id}
+                    className="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                          {report.tenantName}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {report.documentType} • Property: {report.propertyId}
+                        </p>
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        {new Date(report.createdAt).toLocaleDateString()}
+                      </div>
+                    </div>
+                    
+                    {report.anomalies.length > 0 ? (
+                      <div className="mt-3">
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Anomaly Flags:
+                        </p>
+                        <div className="space-y-2">
+                          {report.anomalies.map((anomaly, idx) => (
+                            <div
+                              key={idx}
+                              className={`text-xs p-2 rounded ${
+                                anomaly.severity === 'high'
+                                  ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                                  : anomaly.severity === 'medium'
+                                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
+                                  : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                              }`}
+                            >
+                              <span className="font-semibold capitalize">{anomaly.severity}</span>
+                              {' • '}{anomaly.type}
+                              <p className="mt-1 text-gray-700 dark:text-gray-300">
+                                {anomaly.evidence}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mt-3">
+                        <div className="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-3 rounded">
+                          <p className="text-sm text-green-800 dark:text-green-200">
+                            ✓ No anomalies detected - Document integrity verified
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="mt-3">
+                      <button className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                        View Full Report →
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
         );
       
@@ -198,11 +332,7 @@ export default function LandlordDashboard() {
       </div>
 
       {/* Footer */}
-      <footer className="mt-8 py-6 border-t border-gray-200 dark:border-gray-700">
-        <div className="container mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400">
-          PropertyOps AI • Laura Portal • Phase 3 RBAC • © {new Date().getFullYear()}
-        </div>
-      </footer>
+      <DisclaimerFooter />
     </main>
   );
 }
