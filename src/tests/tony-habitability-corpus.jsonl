@@ -1,0 +1,50 @@
+{"id": "case-001", "category": "clear-habitability", "label": "no heat / heating failure", "message": "There is no heat in the apartment and the furnace stopped working last night.", "expectedFlag": true, "language": "en"}
+{"id": "case-002", "category": "clear-habitability", "label": "no water / plumbing failure", "message": "We have no hot water and the plumbing is backing up into the tub.", "expectedFlag": true, "language": "en"}
+{"id": "case-003", "category": "clear-habitability", "label": "electrical hazard", "message": "The outlet is sparking and there is exposed wiring by the bedroom wall.", "expectedFlag": true, "language": "en"}
+{"id": "case-004", "category": "clear-habitability", "label": "gas leak / gas odor", "message": "There is a gas smell in the kitchen and it smells like rotten eggs.", "expectedFlag": true, "language": "en"}
+{"id": "case-005", "category": "clear-habitability", "label": "structural damage", "message": "The ceiling is collapsing and there is structural damage over the bathroom.", "expectedFlag": true, "language": "en"}
+{"id": "case-006", "category": "clear-habitability", "label": "pest infestation", "message": "We have mice and a roach infestation in the pantry.", "expectedFlag": true, "language": "en"}
+{"id": "case-007", "category": "clear-habitability", "label": "mold / mildew", "message": "There is black mold growing behind the bedroom dresser.", "expectedFlag": true, "language": "en"}
+{"id": "case-008", "category": "clear-habitability", "label": "security breach", "message": "The front door lock is broken and the window will not lock.", "expectedFlag": true, "language": "en"}
+{"id": "case-009", "category": "clear-habitability", "label": "health / safety hazard", "message": "This is an unsafe emergency and the unit is becoming uninhabitable.", "expectedFlag": true, "language": "en"}
+{"id": "case-010", "category": "clear-habitability", "label": "no heat / heating failure", "message": "Heater is broken and it's freezing in here.", "expectedFlag": true, "language": "en"}
+{"id": "case-011", "category": "ambiguous", "label": "no heat / heating failure", "message": "It's really cold in the apartment.", "expectedFlag": true, "language": "en"}
+{"id": "case-012", "category": "ambiguous", "label": "no water / plumbing failure", "message": "The water pressure is weird today.", "expectedFlag": false, "language": "en"}
+{"id": "case-013", "category": "ambiguous", "label": "no water / plumbing failure", "message": "Water is not working.", "expectedFlag": true, "language": "en"}
+{"id": "case-014", "category": "ambiguous", "label": "structural damage", "message": "There's a crack in the wall.", "expectedFlag": true, "language": "en"}
+{"id": "case-015", "category": "ambiguous", "label": "mold / mildew", "message": "There's some discoloration on the bathroom ceiling.", "expectedFlag": false, "language": "en"}
+{"id": "case-016", "category": "spanish", "label": "no heat / heating failure", "message": "No hay calefacción en el apartamento y hace mucho frío.", "expectedFlag": true, "language": "es"}
+{"id": "case-017", "category": "spanish", "label": "no water / plumbing failure", "message": "No tenemos agua caliente desde ayer.", "expectedFlag": true, "language": "es"}
+{"id": "case-018", "category": "spanish", "label": "gas leak / gas odor", "message": "Huele a gas en la cocina.", "expectedFlag": true, "language": "es"}
+{"id": "case-019", "category": "spanish", "label": "pest infestation", "message": "Hay ratones en la cocina.", "expectedFlag": true, "language": "es"}
+{"id": "case-020", "category": "spanish", "label": "structural damage", "message": "El techo se está cayendo en el baño.", "expectedFlag": true, "language": "es"}
+{"id": "case-021", "category": "multi-issue", "label": "multiple", "message": "No heat and the window won't lock.", "expectedFlag": true, "language": "en"}
+{"id": "case-022", "category": "multi-issue", "label": "multiple", "message": "There's mold in the bedroom and the heater is broken.", "expectedFlag": true, "language": "en"}
+{"id": "case-023", "category": "multi-issue", "label": "multiple", "message": "No hot water, plus I need help installing a shelf.", "expectedFlag": true, "language": "en"}
+{"id": "case-024", "category": "multi-issue", "label": "multiple", "message": "Gas smell and the door lock is stuck.", "expectedFlag": true, "language": "en"}
+{"id": "case-025", "category": "multi-issue", "label": "multiple", "message": "Mice in the kitchen and the faucet is dripping.", "expectedFlag": true, "language": "en"}
+{"id": "case-026", "category": "false-positive", "label": "cosmetic", "message": "Please repaint the bedroom wall.", "expectedFlag": false, "language": "en"}
+{"id": "case-027", "category": "false-positive", "label": "cosmetic", "message": "The cabinet handle is loose, can you fix it?", "expectedFlag": false, "language": "en"}
+{"id": "case-028", "category": "false-positive", "label": "preference", "message": "Can you install a new light fixture? I don't like the current one.", "expectedFlag": false, "language": "en"}
+{"id": "case-029", "category": "false-positive", "label": "cosmetic", "message": "The carpet is stained but not damaged.", "expectedFlag": false, "language": "en"}
+{"id": "case-030", "category": "false-positive", "label": "preference", "message": "I'd like a fan installed in the bathroom.", "expectedFlag": false, "language": "en"}
+{"id": "case-031", "category": "edge-case", "label": "no heat / heating failure", "message": "The thermostat shows 55 degrees but it's set to 72.", "expectedFlag": true, "language": "en"}
+{"id": "case-032", "category": "edge-case", "label": "electrical hazard", "message": "The lights flicker when I plug in the microwave.", "expectedFlag": true, "language": "en"}
+{"id": "case-033", "category": "edge-case", "label": "no water / plumbing failure", "message": "Brown water coming out of the tap.", "expectedFlag": true, "language": "en"}
+{"id": "case-034", "category": "edge-case", "label": "health / safety hazard", "message": "I can't breathe well in here, something smells off.", "expectedFlag": true, "language": "en"}
+{"id": "case-035", "category": "edge-case", "label": "structural damage", "message": "The floor feels spongy when I walk on it.", "expectedFlag": true, "language": "en"}
+{"id": "case-036", "category": "partial", "label": "no water / plumbing failure", "message": "Sink is clogged.", "expectedFlag": true, "language": "en"}
+{"id": "case-037", "category": "partial", "label": "pest infestation", "message": "Seeing bugs in the bathroom.", "expectedFlag": true, "language": "en"}
+{"id": "case-038", "category": "partial", "label": "mold / mildew", "message": "Smell something musty in the closet.", "expectedFlag": true, "language": "en"}
+{"id": "case-039", "category": "partial", "label": "security breach", "message": "Can't get the deadbolt to turn.", "expectedFlag": true, "language": "en"}
+{"id": "case-040", "category": "partial", "label": "electrical hazard", "message": "Outlet feels hot to touch.", "expectedFlag": true, "language": "en"}
+{"id": "case-041", "category": "urgent-language", "label": "health / safety hazard", "message": "EMERGENCY - need help immediately!", "expectedFlag": true, "language": "en"}
+{"id": "case-042", "category": "urgent-language", "label": "health / safety hazard", "message": "This is dangerous, please come ASAP.", "expectedFlag": true, "language": "en"}
+{"id": "case-043", "category": "urgent-language", "label": "no heat / heating failure", "message": "URGENT: No heat, kids are freezing.", "expectedFlag": true, "language": "en"}
+{"id": "case-044", "category": "urgent-language", "label": "no water / plumbing failure", "message": "Water everywhere, help!!", "expectedFlag": true, "language": "en"}
+{"id": "case-045", "category": "urgent-language", "label": "gas leak / gas odor", "message": "SMELL GAS - CALLING 911", "expectedFlag": true, "language": "en"}
+{"id": "case-046", "category": "non-english", "label": "no heat / heating failure", "message": "Il n'y a pas de chauffage dans l'appartement.", "expectedFlag": false, "language": "fr"}
+{"id": "case-047", "category": "non-english", "label": "no water / plumbing failure", "message": "没有热水。", "expectedFlag": false, "language": "zh"}
+{"id": "case-048", "category": "typo-noise", "label": "no heat / heating failure", "message": "nooooo heat pls help its so coldd", "expectedFlag": true, "language": "en"}
+{"id": "case-049", "category": "typo-noise", "label": "gas leak / gas odor", "message": "gas smel???? help", "expectedFlag": true, "language": "en"}
+{"id": "case-050", "category": "typo-noise", "label": "pest infestation", "message": "mice mouses ratsss everywhere", "expectedFlag": true, "language": "en"}
