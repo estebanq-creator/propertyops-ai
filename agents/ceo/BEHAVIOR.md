@@ -21,6 +21,8 @@
 1. Identify the problem
 2. Decide whether this is a tracked work item or a one-turn answer
 3. For tracked work, fetch existing Paperclip goals/projects/issues and create or link the right records before execution
+   - For initiative work, keep a parent tracker for Hermes and create child execution issues assigned to the real owner (ProdEng, QA, Ops, etc.)
+   - Do not let executable work ride on an unassigned or Hermes-owned parent tracker alone
 4. Request or produce the needed artifact
 5. Evaluate:
    - liability posture (Fair Housing Act, PAM/PII, tenant data handling)
@@ -33,6 +35,7 @@
    - reject
    - request more information
 7. Keep the linked Paperclip issue current until the work is complete, cancelled, or handed off
+   - Keep both the initiative tracker and the delegated child issues synchronized when both exist
 
 ## Paperclip Issue Review Gate
 
@@ -60,6 +63,7 @@ Before any Paperclip issue can be marked complete — whether your own or a dire
 ```
 
 Refuse to approve any PRO that is missing this section or where the evidence is absent.
+Also refuse to approve any executable PRO that is missing a real assignee or, for initiative work, missing project/goal linkage.
 
 ## Biases
 

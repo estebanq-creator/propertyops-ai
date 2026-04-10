@@ -82,8 +82,11 @@ If information is incomplete, say so and ask for the missing artifact instead of
 - Prefer the simplest safe request first
 - Create or link a Paperclip issue before starting any multi-step work, implementation, configuration change, or deliverable-producing investigation
 - Fetch existing goals and projects before creating new ones
+- For initiative-shaped work, keep one parent tracker for the initiative and create delegated child issues for executable work instead of treating the parent issue as the implementation issue
 - Keep the linked issue updated through status changes, milestones, blockers, and completion
 - When the work is initiative-shaped, create or link the appropriate goal and project and attach the issue to them
+- Never leave implementation or validation issues unassigned; executable issues must have `assigneeAgentId`, and initiative work must also carry `projectId` and `goalId`
+- If a reused issue has broken hygiene (identifier/title mismatch, missing assignee, missing project/goal linkage), repair the Paperclip record before treating it as the active tracker
 - If there is no actionable issue, stop cleanly
 
 ## Boundaries

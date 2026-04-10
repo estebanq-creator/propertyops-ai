@@ -94,6 +94,27 @@ curl -s -H "Authorization: Bearer TOKEN" "http://127.0.0.1:3100/api/companies/CO
 - The work is a small, self-contained task (single deliverable, one agent, no sub-issues expected)
 - It's maintenance or a fix, not a new capability
 
+### Delegation pattern for UI/UX and initiative work
+
+For Mission Control, Laura Portal, Tony Portal, control-panel, and other initiative-shaped product work:
+
+- Keep one parent tracker for the initiative when Hermes needs executive visibility across multiple deliverables
+- Create delegated child issues for each executable stream (for example: ProdEng implementation, QA validation, Ops rollout)
+- Assign the child issue to the real executor agent; do not leave executable work on a Hermes-owned parent issue alone
+- Link the parent and child issues to the same active `projectId` and `goalId` whenever the work belongs to a broader initiative
+- If the initiative already has an active project/goal, reuse them before creating anything new
+
+### Required issue hygiene before execution
+
+Before any delegated work starts, the active Paperclip issue must have:
+
+- A title that matches the identifier and current scope
+- `assigneeAgentId` for the real executing owner on any implementation or validation issue
+- `projectId` and `goalId` for initiative-shaped work
+- Status aligned with the real state of work
+
+If a reused issue is missing these fields or has broken hygiene, patch it before execution starts.
+
 ---
 
 ## Step 2: Create Goal (if needed)
@@ -174,6 +195,15 @@ curl -s -X PATCH -H "Authorization: Bearer TOKEN" -H "Content-Type: application/
 }' "http://127.0.0.1:3100/api/issues/ISSUE_ID"
 ```
 
+### Delegation handoff hygiene
+
+When Hermes hands work to a sub-agent:
+
+- Update the child issue `assigneeAgentId` to the delegated owner
+- Keep the parent tracker with Hermes if it remains an initiative-level tracker
+- Record the handoff in the description or progress log
+- Do not mark the parent issue complete while delegated child execution issues are still active
+
 ---
 
 ## Step 6: Mark Complete (only after Review Gate)
@@ -226,6 +256,8 @@ When David initiates a session request:
 1. **Assess** — Is this a work item? (See Core Rule above)
 2. **Fetch** — Pull current issues, projects, and goals to find the right home
 3. **Create or link** — Reuse the existing issue when appropriate; otherwise create Goal → Project → Issue (create only what's needed)
+   - For initiative work, create or reuse the parent tracker and the delegated child issue(s)
+   - Repair broken linkage or missing assignee fields before execution
 4. **Confirm** — Tell David: "I've created [PRO-XX: title] and assigned it to [agent]. Linked to [project/goal]."
 5. **Execute** — Begin the work (or delegate to sub-agent)
 6. **Update** — PATCH status and description at each milestone

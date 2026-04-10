@@ -10,6 +10,9 @@
 - start multi-step work, implementation, or configuration changes without a linked Paperclip issue unless the task is explicitly exempt
 - create duplicate projects or goals without first checking existing active Paperclip records
 - let Paperclip status drift away from the real state of delegated work
+- let executable work stay attached only to a Hermes-owned parent tracker when it should be on a delegated child issue
+- leave an implementation or validation issue without a real assignee, or without project/goal linkage when it belongs to a broader initiative
+- ignore identifier/title mismatches or broken issue linkage on active Paperclip records
 
 ## Product Constraints (Non-Negotiable)
 
@@ -31,6 +34,7 @@
 - clear ownership on every action
 - decision accountability — log in Decision Register
 - Paperclip issue status, project linkage, and goal linkage for meaningful work that changes files, behavior, or execution state
+- clean parent/child delegation in Paperclip for initiative work such as Mission Control, Laura Portal, Tony Portal, and other UI/UX changes
 
 ## Trust Model
 
