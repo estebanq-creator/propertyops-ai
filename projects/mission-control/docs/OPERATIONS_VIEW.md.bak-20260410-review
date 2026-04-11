@@ -1,0 +1,605 @@
+# Operations View & Audit Log - Implementation Guide
+
+## Overview
+
+This document describes the **Operations View** components that satisfy the "Memory & Feedback Moat" business requirement:
+
+1. **Audit Log Viewer** - Tamper-evident log of all AI agent actions, human approvals, and system events
+2. **Cron Job Manager** - Visual management interface for scheduled tasks (Phase 2: read-only, Phase 3: full control)
+
+---
+
+## Business Requirement: Memory & Feedback Moat
+
+> **Requirement:** Build a compliant, tamper-evident log viewer and visual Cron Job manager to create an auditable trail of all AI decisions and human interventions.
+
+### Why This Matters
+
+1. **Compliance** - 36-month minimum data retention for regulatory requirements
+2. **Trust** - Transparent AI reasoning visible to human reviewers
+3. **Accountability** - Clear audit trail of who approved what and when
+4. **Learning** - Historical data for improving AI decision-making
+5. **Moat** - Proprietary operational data becomes competitive advantage
+
+---
+
+## Component Architecture
+
+```
+mission-control/
+├── components/
+│   ├── audit/
+│   │   └── AuditLogViewer.tsx      # Main audit log data grid
+│   └── cron/
+│       └── CronJobManager.tsx      # Cron job visual manager
+├── lib/
+│   ├── validations/
+│   │   ├── audit.ts                # Zod schemas for audit logs
+│   │   └── cron.ts                 # Zod schemas for cron jobs
+│   └── store/
+│       ├── audit-store.ts          # Tamper-evident audit log store
+│       └── cron-store.ts           # Cron job management store
+├── app/
+│   └── api/
+│       ├── audit/
+│       │   └── route.ts            # Audit log CRUD API
+│       └── cron/
+│           └── route.ts            # Cron job management API
+└── docs/
+    └── OPERATIONS_VIEW.md          # This file
+```
+
+---
+
+## 1. Audit Log Viewer
+
+### Features
+
+- **Heavily Filterable Data Grid**
+  - Filter by event type category (AI Agent, Human Actions, System Events, Security, Data)
+  - Filter by severity (Info, Warning, Error, Critical)
+  - Filter by actor type (Human, Agent, System, API)
+  - Filter by outcome (Success/Failure)
+  - Full-text search across all fields
+  - Date range filtering
+
+- **Tamper-Evident Hash Chain**
+  - Each entry contains SHA-256 hash of its content + previous entry's hash
+  - Visual hash chain indicator in UI
+  - Chain verification API endpoint
+  - Any tampering breaks the chain and is immediately detectable
+
+- **36-Month Retention Policy**
+  - Automatic retention date calculation (36 months from event)
+  - Visual compliance indicator in UI
+  - Automatic purge of expired entries (configurable)
+  - Compliance status: Compliant, Warning, Violation
+
+- **Expandable Row Details**
+  - Input data that triggered the event
+  - AI reasoning output (model, prompt, reasoning, confidence)
+  - Final outcome (success/failure, result, errors)
+  - Full tamper-evidence details (hash, previous hash, signature)
+
+### Usage
+
+```tsx
+import { AuditLogViewer } from "@/components/audit/AuditLogViewer"
+
+// Fetch audit logs from API
+const response = await fetch("/api/audit?limit=50&sortBy=timestamp&sortOrder=desc")
+const { entries, pagination, retention } = await response.json()
+
+// Render viewer
+<AuditLogViewer
+  entries={entries}
+  isLoading={isLoading}
+  onFilterChange={(filter) => {
+    // Handle filter changes (update URL, refetch, etc.)
+  }}
+  onViewDetails={(entry) => {
+    // Optional: custom details view
+  }}
+/>
+```
+
+### API Endpoints
+
+#### `GET /api/audit`
+
+Query audit logs with filtering.
+
+**Query Parameters:**
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| eventTypes | string[] | Filter by event types (comma-separated) |
+| severity | string | Filter by severity level |
+| dateFrom | string | ISO8601 datetime |
+| dateTo | string | ISO8601 datetime |
+| actorType | string | human, agent, system, api |
+| actorId | string | Filter by specific actor |
+| resourceType | string | Filter by resource type |
+| resourceId | string | Filter by specific resource |
+| success | boolean | Filter by outcome |
+| search | string | Full-text search |
+| page | number | Page number (default: 1) |
+| limit | number | Results per page (default: 50, max: 100) |
+| sortBy | string | timestamp, severity, eventType |
+| sortOrder | string | asc, desc |
+
+**Response:**
+```json
+{
+  "entries": [...],
+  "pagination": {
+    "page": 1,
+    "limit": 50,
+    "total": 1234,
+    "totalPages": 25,
+    "hasMore": true
+  },
+  "retention": {
+    "policy": "36-months",
+    "minimumRetentionMonths": 36,
+    "oldestEntry": "2023-01-15T10:30:00Z",
+    "complianceStatus": "compliant"
+  }
+}
+```
+
+#### `POST /api/audit`
+
+Create a new audit log entry (internal use).
+
+**Request:**
+```json
+{
+  "eventType": "agent_report_generated",
+  "severity": "info",
+  "actor": {
+    "type": "agent",
+    "id": "agent-001",
+    "name": "OpenClaw-Primary"
+  },
+  "resource": {
+    "type": "property",
+    "id": "prop-123",
+    "name": "123 Main St"
+  },
+  "inputData": {
+    "propertyId": "prop-123",
+    "reportType": "inspection"
+  },
+  "agentReasoning": {
+    "model": "qwen3.5:cloud",
+    "modelVersion": "1.0",
+    "prompt": "Generate inspection report...",
+    "reasoning": "Based on the property data, I'm generating...",
+    "confidence": 0.92,
+    "tokensUsed": 1523,
+    "latencyMs": 2341
+  },
+  "outcome": {
+    "success": true,
+    "result": "Report generated successfully"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "eventType": "agent_report_generated",
+  "severity": "info",
+  "timestamp": "2025-04-10T14:30:00Z",
+  "actor": {...},
+  "resource": {...},
+  "inputData": {...},
+  "agentReasoning": {...},
+  "outcome": {...},
+  "hash": "a1b2c3d4e5f6...",
+  "previousHash": "f6e5d4c3b2a1...",
+  "retentionUntil": "2028-04-10T14:30:00Z",
+  "retentionPolicy": "36-months"
+}
+```
+
+### Event Types
+
+| Category | Event Types |
+|----------|-------------|
+| AI Agent | agent_report_generated, agent_draft_created, agent_analysis_complete, agent_data_sync, agent_notification_draft |
+| Human Actions | human_approval, human_rejection, human_modification, human_override |
+| System Events | dispatch_event, webhook_sent, alert_triggered, cron_job_executed, cron_job_failed |
+| Security | login_attempt, permission_change, api_key_created, api_key_revoked |
+| Data | data_export, data_import, data_deletion_scheduled, data_retention_check |
+
+---
+
+## 2. Cron Job Manager
+
+### Features
+
+- **Visual List View**
+  - Job name, description, and status indicators
+  - Schedule expression (cron format) with human-readable description
+  - Next run time with relative time display
+  - Last execution result with success/failure indicator
+  - Success rate percentage with color coding
+
+- **Aggregate Statistics**
+  - Total jobs count
+  - Active/Paused/Disabled breakdown
+  - Overall success rate with progress bar
+  - Total executions count
+
+- **Expandable Job Details**
+  - Full schedule configuration
+  - Execution target (command, script, webhook, API)
+  - Execution statistics (total runs, success/failure counts, avg duration)
+  - Configuration (timeout, retry, notifications, concurrency)
+  - Last execution details with output/error logs
+
+- **Phase 3 Scaffolding**
+  - Disabled controls for: Run Now, Pause/Resume, Configure, Delete
+  - Tooltips indicating "Available in Phase 3"
+  - Notice dialog when attempting to use Phase 3 features
+
+### Usage
+
+```tsx
+import { CronJobManager } from "@/components/cron/CronJobManager"
+
+// Fetch cron jobs from API
+const response = await fetch("/api/cron")
+const { jobs, stats } = await response.json()
+
+// Render manager
+<CronJobManager
+  jobs={jobs}
+  isLoading={isLoading}
+  onJobSelect={(job) => {
+    // Handle job selection
+  }}
+  onToggleStatus={(jobId, status) => {
+    // Phase 3: Toggle job status
+  }}
+  onExecute={(jobId) => {
+    // Phase 3: Manual execution
+  }}
+  onViewHistory={(jobId) => {
+    // Phase 3: View execution history
+  }}
+/>
+```
+
+### API Endpoints
+
+#### `GET /api/cron`
+
+List all cron jobs.
+
+**Query Parameters:**
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| status | string | Filter by status (active, paused, disabled, running, failed) |
+| category | string | Filter by category (system, agent, reporting, maintenance, integration, custom) |
+| tag | string | Filter by tag |
+| search | string | Search name and description |
+
+**Response:**
+```json
+{
+  "jobs": [...],
+  "total": 12,
+  "stats": {
+    "total": 12,
+    "active": 8,
+    "paused": 2,
+    "disabled": 1,
+    "running": 1,
+    "failed": 0,
+    "totalRuns": 1523,
+    "successfulRuns": 1489,
+    "failedRuns": 34,
+    "successRate": 97.8
+  }
+}
+```
+
+#### `POST /api/cron`
+
+Create a new cron job (Phase 3).
+
+**Request:**
+```json
+{
+  "name": "Daily Reconciliation",
+  "description": "Run daily bank reconciliation for all properties",
+  "schedule": {
+    "expression": "0 2 * * *",
+    "description": "Every day at 2:00 AM",
+    "timezone": "America/New_York"
+  },
+  "target": {
+    "type": "script",
+    "scriptPath": "/scripts/reconciliation.py",
+    "workingDirectory": "/app",
+    "environment": {
+      "ENV": "production"
+    }
+  },
+  "config": {
+    "timeout": 600,
+    "retry": {
+      "enabled": true,
+      "maxAttempts": 3,
+      "delaySeconds": 60
+    },
+    "notifications": {
+      "onSuccess": false,
+      "onFailure": true,
+      "channels": ["email", "slack"]
+    }
+  }
+}
+```
+
+### Cron Job Schema
+
+```typescript
+interface CronJob {
+  id: string
+  name: string
+  description: string
+  schedule: {
+    expression: string  // Cron expression
+    description: string // Human-readable
+    timezone: string
+    nextRuns: string[]  // Pre-calculated run times
+  }
+  target: {
+    type: "command" | "script" | "webhook" | "api"
+    command?: string
+    scriptPath?: string
+    webhookUrl?: string
+    apiEndpoint?: string
+    workingDirectory?: string
+    environment?: Record<string, string>
+  }
+  status: "active" | "paused" | "disabled" | "running" | "failed"
+  lastRun?: {
+    success: boolean
+    output?: string
+    error?: string
+    duration?: number
+    startedAt: string
+    completedAt?: string
+  }
+  nextRun?: string
+  stats: {
+    totalRuns: number
+    successfulRuns: number
+    failedRuns: number
+    averageDuration?: number
+    lastSuccess?: string
+    lastFailure?: string
+    consecutiveFailures: number
+  }
+  config: {
+    timeout: number
+    retry?: { enabled, maxAttempts, delaySeconds, backoffMultiplier }
+    notifications?: { onSuccess, onFailure, channels }
+    concurrency?: { allowParallel, maxConcurrent }
+    logging?: { level, retainLogsDays, includeOutput }
+  }
+}
+```
+
+---
+
+## Tamper-Evidence Implementation
+
+### Hash Chain
+
+Each audit log entry contains:
+
+1. **hash** - SHA-256 hash of the entry content + previous hash
+2. **previousHash** - Hash of the previous entry in the chain
+3. **signature** (optional) - Digital signature using private key
+
+```
+Entry N-1: hash = SHA256(content + previousHash)
+Entry N:   hash = SHA256(content + Entry N-1 hash)
+Entry N+1: hash = SHA256(content + Entry N hash)
+```
+
+### Verification
+
+```typescript
+// Verify entire hash chain
+const result = auditLog.verifyChain()
+if (!result.valid) {
+  console.error(`Tamper detected at index ${result.brokenAtIndex}`)
+  // Alert security team, initiate investigation
+}
+```
+
+### Production Recommendations
+
+1. **Sign hashes with private key** - Store private key in HSM or secure vault
+2. **Periodic chain verification** - Run verification hourly/daily
+3. **External audit log** - Mirror logs to immutable storage (S3 Object Lock, WORM)
+4. **Merkle tree** - For large volumes, use Merkle tree for efficient verification
+5. **Blockchain anchoring** - Periodically anchor hash to blockchain for public verification
+
+---
+
+## Retention Policy
+
+### Automatic Retention
+
+- **Duration:** 36 months minimum from event timestamp
+- **Calculation:** `retentionUntil = eventTimestamp + 36 months`
+- **Compliance Check:** Daily automated check
+- **Purge:** Automatic deletion of expired entries (configurable)
+
+### Compliance Status
+
+| Status | Condition | Action |
+|--------|-----------|--------|
+| Compliant | All entries within retention period | None |
+| Warning | Entries approaching retention deadline (< 1 month) | Alert admin |
+| Violation | Entries past retention date | Immediate investigation |
+
+### Export for Compliance Audit
+
+```typescript
+// Export all logs for a date range
+const logs = auditLog.export({
+  dateFrom: "2024-01-01T00:00:00Z",
+  dateTo: "2024-12-31T23:59:59Z",
+  includeHashes: true,
+})
+
+// Download as JSON
+const blob = new Blob([JSON.stringify(logs, null, 2)], { type: "application/json" })
+```
+
+---
+
+## Accessibility (WCAG 2.1 AA)
+
+### Implemented Features
+
+1. **Keyboard Navigation**
+   - All interactive elements focusable
+   - Expand/collapse with Enter/Space
+   - Filter controls accessible via Tab
+
+2. **Screen Reader Support**
+   - ARIA labels on all buttons and controls
+   - Status announcements via `role="status"`
+   - Descriptive text for hash chains and tamper indicators
+
+3. **Color Contrast**
+   - Severity badges meet 4.5:1 contrast ratio
+   - Status indicators not solely color-dependent (icons + text)
+
+4. **Focus Indicators**
+   - Visible focus rings on all interactive elements
+   - Focus management in dialogs
+
+5. **Error Prevention**
+   - Confirmation dialogs for destructive actions (Phase 3)
+   - Clear error messages with recovery instructions
+
+---
+
+## Performance Optimization
+
+### React Server Components
+
+- Audit log data fetched on server
+- Initial render without client-side loading
+- Streaming for large datasets
+
+### Client-Side Optimization
+
+```tsx
+// useMemo for filtered results
+const filteredEntries = useMemo(() => {
+  // Filter logic
+}, [entries, filter])
+
+// Debounced search
+useEffect(() => {
+  const timer = setTimeout(() => {
+    // Update filter
+  }, 300)
+  return () => clearTimeout(timer)
+}, [searchQuery])
+```
+
+### Pagination
+
+- Default: 50 entries per page
+- Max: 100 entries per page
+- Cursor-based pagination for large datasets (future)
+
+---
+
+## Phase 2 vs Phase 3
+
+### Phase 2 (Current)
+
+✅ Read-only audit log viewer
+✅ Read-only cron job manager
+✅ Tamper-evident hash chain
+✅ 36-month retention policy
+✅ Aggregate statistics
+✅ Full filtering and search
+
+### Phase 3 (Planned)
+
+⏳ Create/edit/delete cron jobs
+⏳ Manual job execution
+⏳ Enable/disable jobs
+⏳ Configure schedules and targets
+⏳ Set up notifications and retries
+⏳ Execution history viewer
+⏳ Audit log export to external storage
+⏳ Digital signatures for hash chain
+⏳ Blockchain anchoring
+
+---
+
+## Testing
+
+### Unit Tests
+
+```typescript
+// Audit log creation
+test("creates tamper-evident entry", () => {
+  const entry = auditLog.create({...})
+  expect(entry.hash).toBeDefined()
+  expect(entry.previousHash).toBeDefined()
+  expect(entry.retentionUntil).toBeDefined()
+})
+
+// Hash chain verification
+test("verifies unbroken chain", () => {
+  const result = auditLog.verifyChain()
+  expect(result.valid).toBe(true)
+})
+
+// Retention compliance
+test("detects compliance violation", () => {
+  const status = auditLog.checkCompliance()
+  expect(status).toBe("compliant")
+})
+```
+
+### Integration Tests
+
+```typescript
+// API endpoint testing
+test("GET /api/audit returns paginated results", async () => {
+  const response = await fetch("/api/audit?limit=10")
+  expect(response.status).toBe(200)
+  const data = await response.json()
+  expect(data.entries.length).toBeLessThanOrEqual(10)
+  expect(data.pagination).toBeDefined()
+})
+```
+
+---
+
+## Security Considerations
+
+1. **Access Control** - Only authorized users can view audit logs
+2. **Rate Limiting** - Prevent abuse of query endpoints
+3. **Input Validation** - All inputs validated with Zod schemas
+4. **Hash Protection** - Store hashes in separate, read-only table
+5. **Audit the Auditors** - Log all access to audit log viewer
