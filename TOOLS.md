@@ -29,23 +29,6 @@ Things like:
 
 - Preferred voice: "Nova" (warm, slightly British)
 - Default speaker: Kitchen HomePod
-
-### Vicky - Email & Calendar Access
-
-Vicky can request email/calendar information from Cal:
-
-**Gmail:**
-- Search by sender, subject, date range, labels
-- Summarize unread inbox
-- Extract message content
-- Use: `gog gmail search` or `gog gmail messages search`
-
-**Calendar:**
-- List upcoming events
-- Check specific date ranges
-- Use: `gog calendar events <calendarId> --from <iso> --to <iso>`
-
-**Workflow:** Vicky asks → Cal fetches via gog → Cal reports back
 ```
 
 ## Why Separate?
