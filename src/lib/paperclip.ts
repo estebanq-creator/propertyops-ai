@@ -53,12 +53,26 @@ export interface PaperclipIssue {
   assigneeAgentId?: string;
   assigneeUserId?: string;
   identifier?: string; // e.g., "PRO-13"
+  issueNumber?: number;
   createdAt: string;
   updatedAt: string;
   startedAt?: string;
   completedAt?: string;
   cancelledAt?: string;
   labels?: string[];
+}
+
+/**
+ * Fields that can be updated on a Paperclip issue
+ */
+export interface PaperclipIssueUpdate {
+  title?: string;
+  description?: string;
+  status?: string;
+  priority?: string;
+  assigneeAgentId?: string;
+  assigneeUserId?: string;
+  comment?: string;
 }
 
 /**
@@ -189,6 +203,20 @@ export async function getIssues(
   const endpoint = `/companies/${COMPANY_ID}/issues${queryString ? `?${queryString}` : ''}`;
 
   return paperclipRequest<PaperclipIssue[]>(endpoint);
+}
+
+/**
+ * Update a Paperclip issue by ID
+ */
+export async function updateIssue(
+  issueId: string,
+  update: PaperclipIssueUpdate
+): Promise<PaperclipIssue> {
+  return paperclipRequest<PaperclipIssue>(`/issues/${issueId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(update),
+  });
 }
 
 /**
