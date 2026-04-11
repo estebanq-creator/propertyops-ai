@@ -53,6 +53,25 @@ Provide analytical document review for tenant screening while maintaining strict
 - No protected class information in analysis criteria
 - All outputs must be explainable and defensible
 
+## Paperclip Issue Review Gate
+
+Before marking any Paperclip issue complete, it must pass a three-part self-review:
+
+1. **Accuracy** — Is the analysis technically correct? Are all forensic findings cited with evidence?
+2. **Completeness** — Are all artifacts present? (anomaly reports, audit log entries, Shadow Mode tags applied.) "Done" statements without evidence do not pass.
+3. **Quality** — Is every output strictly analytical with no decisional language? Would it survive compliance review?
+
+**You cannot mark an issue complete without Hermes's explicit approval.** Submit the PRO for Hermes review with the audit trail below completed. In Phase 0, David's manual review confirmation is also required as evidence.
+
+**Audit trail format** (add to the PRO "Approval Status" section):
+```
+## Approval Status
+- [ ] Self-Review: Laura + [Date] — Accuracy ✓ / Completeness ✓ / Quality ✓
+- [ ] Phase 0 Evidence: David manual review confirmed — Yes/No
+- [ ] Final Approval: Hermes + [Date]
+- [ ] Engineering/Execution Ready: Yes/No
+```
+
 ## Execution Pattern
 1. Receive documents via intake pipeline (CodeGen-built)
 2. Perform forensic analysis using structured criteria

@@ -1,0 +1,162 @@
+{
+  "period": "2026-04",
+  "monthName": "April 2026",
+  "generatedAt": "2026-04-08T20:18:27.656Z",
+  "revenue": {
+    "total": 287766,
+    "breakdown": {
+      "mrr_subscriptions": 287766
+    }
+  },
+  "expenses": {
+    "infrastructure": 56141,
+    "sales_marketing": 16076,
+    "operations": 0,
+    "legal": 0,
+    "fees": 0,
+    "other": 3155379,
+    "total": 3227596
+  },
+  "profit": {
+    "gross_profit": -2939830,
+    "gross_margin_percent": -1021.6043590973221
+  },
+  "burn_analysis": {
+    "estimated_monthly_burn": 96827880,
+    "target_burn_min": 43000,
+    "target_burn_max": 68000,
+    "status": "Over Target by $967598.8"
+  },
+  "cash_position": {
+    "mercury_balance": 0,
+    "estimated_runway_months": "N/A"
+  },
+  "data_quality": {
+    "total_transactions": 15,
+    "unknown_transactions": 0,
+    "categorization_accuracy": "100.0"
+  },
+  "transaction_details": [
+    {
+      "date": "2026-04-08T21:52:00.000Z",
+      "description": "Registered Agent",
+      "amount": 47344,
+      "category": "Revenue",
+      "subcategory": "SaaS Subscriptions",
+      "confidence": 0.95
+    },
+    {
+      "date": "2026-04-08T20:33:00.000Z",
+      "description": "HubSpot CRM",
+      "amount": 3598,
+      "category": "Sales & Marketing",
+      "subcategory": "CRM",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-08T19:10:00.000Z",
+      "description": "Payroll Processing",
+      "amount": 1125367,
+      "category": "Payroll",
+      "subcategory": "Salary & Wages",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-08T16:31:00.000Z",
+      "description": "Supabase Database",
+      "amount": 2349,
+      "category": "Infrastructure",
+      "subcategory": "Database",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-07T20:36:00.000Z",
+      "description": "Cloudflare",
+      "amount": 4181,
+      "category": "Infrastructure",
+      "subcategory": "CDN & Security",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-06T22:27:00.000Z",
+      "description": "Supabase Database",
+      "amount": 9117,
+      "category": "Infrastructure",
+      "subcategory": "Database",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-06T18:31:00.000Z",
+      "description": "Cloudflare",
+      "amount": 4116,
+      "category": "Infrastructure",
+      "subcategory": "CDN & Security",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-06T16:24:00.000Z",
+      "description": "HubSpot CRM",
+      "amount": 4697,
+      "category": "Sales & Marketing",
+      "subcategory": "CRM",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-06T13:15:00.000Z",
+      "description": "Stripe Payout",
+      "amount": 228069,
+      "category": "Revenue",
+      "subcategory": "SaaS Subscriptions",
+      "confidence": 0.95
+    },
+    {
+      "date": "2026-04-03T19:12:00.000Z",
+      "description": "Payroll Processing",
+      "amount": 1115634,
+      "category": "Payroll",
+      "subcategory": "Salary & Wages",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-02T22:51:00.000Z",
+      "description": "Payroll Processing",
+      "amount": 914378,
+      "category": "Payroll",
+      "subcategory": "Salary & Wages",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-02T22:31:00.000Z",
+      "description": "HubSpot CRM",
+      "amount": 7781,
+      "category": "Sales & Marketing",
+      "subcategory": "CRM",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-02T22:09:00.000Z",
+      "description": "Supabase Database",
+      "amount": 7828,
+      "category": "Infrastructure",
+      "subcategory": "Database",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-02T14:09:00.000Z",
+      "description": "Vercel Hosting",
+      "amount": 28550,
+      "category": "Infrastructure",
+      "subcategory": "Hosting",
+      "confidence": 0.98
+    },
+    {
+      "date": "2026-04-02T12:28:00.000Z",
+      "description": "Stripe Payout",
+      "amount": 59697,
+      "category": "Revenue",
+      "subcategory": "SaaS Subscriptions",
+      "confidence": 0.95
+    }
+  ],
+  "unknown_transactions": []
+}

@@ -1,0 +1,5 @@
+{
+  "date": "2026-04-07",
+  "error": "Command failed: node \"/Users/david/.openclaw/workspace-hermes/agents/bookkeeping/scripts/fetch-mercury-txns.js\" 2026-04-07\n{\"error\":\"HTTP 404: {\\\"errors\\\":{\\\"notFound\\\":[\\\"We couldn’t find the data associated with your request. Please contact help@mercury.com\\\"]}}\",\"date\":\"2026-04-07\"}\n",
+  "timestamp": "2026-04-08T17:29:58.734Z"
+}

@@ -45,3 +45,9 @@ Add whatever helps you do your job. This is your cheat sheet.
 - Do not pipe `curl` output into `python`, `python3`, shell interpreters, or any other executable.
 - If you need to inspect JSON, either read the raw response directly or use a separate safe step that does not execute downloaded content.
 - Local Paperclip API root: `http://127.0.0.1:3100/api`
+
+## Discord Routing
+
+- **Status Updates**: Channel 1491798095774748753 (webhook: 1491799722065662193)
+- **Intelligence Reports**: Channel 1491501376042176552
+- **Telegram**: Disabled for status/intelligence reports (use Discord only)

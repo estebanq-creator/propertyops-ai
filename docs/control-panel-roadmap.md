@@ -4,6 +4,18 @@
 
 This roadmap defines the phased rollout plan for the Owner Control Panel from MVP to production. The project is structured into 5 phases over 9+ weeks, with each phase delivering incremental value while maintaining security and compliance posture.
 
+**Important scope note:** This is the engineering roadmap for the control panel and supporting infrastructure. It is NOT the product go-to-market sequence.
+
+**Product release sequencing is defined in:** `LAUNCH-DECISION.md`
+
+**GTM Sequence (summary):**
+- Phase 1 product release: Laura pilot (✅ Pilot-Ready)
+- Phase 2 product release: Tony closed beta (🟡 Draft-Only)
+- Phase 3: Billing/commercial automation (⏳ Deferred — manual invoicing for pilots)
+- Phase 4: Controlled autonomy (⏳ Deferred — after trust + compliance gates)
+
+**Engineering can build Phase 2-4 features while GTM releases only Phase 1.**
+
 ---
 
 ## Phase 0: Foundation (Week 1-2)
@@ -42,7 +54,9 @@ This roadmap defines the phased rollout plan for the Owner Control Panel from MV
 
 ## Phase 1: MVP Dashboard (Week 3-4)
 
-**Status:** Not Started
+**Status:** ✅ Complete — Deployed April 7, 2026
+
+**Production URL:** https://control-panel-bskqlsizi-estebanq-7865s-projects.vercel.app
 
 ### Objectives
 - Deploy functional dashboard with read-only system monitoring

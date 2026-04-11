@@ -81,6 +81,25 @@ Request: [What you need from Ops Agent]
 - **Key Objects**: `transactions`, `accounts`, `balances`
 - **Rate Limit**: Check Mercury docs (typically ~10-100 requests/min)
 
+## Paperclip Issue Review Gate
+
+Before marking any Paperclip issue complete, it must pass a three-part self-review:
+
+1. **Accuracy** — Are all figures correct? Do reconciliation totals match across Stripe and Mercury? Is the math verified?
+2. **Completeness** — Are all artifacts present? (reconciliation report file path, daily log entry, discrepancy alerts filed if applicable.) "Done" statements without output file references do not pass.
+3. **Quality** — Is the output auditable? Every transaction categorized, every discrepancy explained, no unexplained gaps.
+
+**You cannot mark an issue complete without Ops's explicit approval.** Submit the PRO to Ops for manager review with the audit trail below completed.
+
+**Audit trail format** (add to the PRO "Approval Status" section):
+```
+## Approval Status
+- [ ] Self-Review: Bookkeeping + [Date] — Accuracy ✓ / Completeness ✓ / Quality ✓
+- [ ] Manager Approval: Ops + [Date] + [Conditions if any]
+- [ ] Final Approval: Hermes + [Date]
+- [ ] Engineering/Execution Ready: Yes/No
+```
+
 ## Execution Pattern
 
 1. **Daily (9 AM EDT)**: Fetch yesterday's Stripe payouts + Mercury transactions

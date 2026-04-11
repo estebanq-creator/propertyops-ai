@@ -20,7 +20,7 @@ console.log('🔍 Mercury API Test');
 console.log('─'.repeat(50));
 
 // Load credentials
-let apiKey, orgConfig;
+let apiKey, orgConfig, isMock = false;
 
 try {
   apiKey = fs.readFileSync(API_KEY_PATH, 'utf8').trim();
@@ -39,6 +39,12 @@ try {
 try {
   orgConfig = JSON.parse(fs.readFileSync(ORG_CONFIG_PATH, 'utf8'));
   console.log(`✅ Organization config loaded: ${ORG_CONFIG_PATH}`);
+  
+  // Check if mock mode
+  if (orgConfig.mockMode) {
+    isMock = true;
+    console.log('🧪 MOCK MODE ENABLED - Using simulated Mercury data');
+  }
 } catch (err) {
   console.error(`❌ Organization config not found: ${ORG_CONFIG_PATH}`);
   console.error('\n📝 Create mercury-org.json with:');
@@ -52,6 +58,45 @@ try {
 
 // Test API connectivity
 function makeRequest(endpoint) {
+  // Mock mode - use simulated data
+  if (isMock) {
+    const mockMercury = require('./mock-mercury');
+    
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          // Parse endpoint to determine what to return
+          if (endpoint.includes('/organizations/')) {
+            const orgId = endpoint.match(/\/organizations\/([^\/]+)/)?.[1];
+            if (endpoint.includes('/accounts/')) {
+              if (endpoint.includes('/balance')) {
+                const accountId = endpoint.match(/\/accounts\/([^\/]+)/)?.[1];
+                resolve(await mockMercury.getBalance(orgId, accountId));
+              } else if (endpoint.includes('/transactions')) {
+                const accountId = endpoint.match(/\/accounts\/([^\/]+)/)?.[1];
+                const url = new URL('https://mock.local' + endpoint);
+                const limit = parseInt(url.searchParams.get('limit') || '50');
+                resolve(await mockMercury.getTransactions(orgId, accountId, { limit }));
+              } else {
+                resolve({ id: mockMercury.ACCOUNT_DATA.id, ...mockMercury.ACCOUNT_DATA });
+              }
+            } else {
+              resolve(await mockMercury.getOrganization(orgId));
+            }
+          } else if (endpoint.includes('/accounts')) {
+            const orgId = endpoint.match(/\/organizations\/([^\/]+)/)?.[1];
+            resolve(await mockMercury.getAccounts(orgId));
+          } else {
+            reject(new Error('Unknown endpoint: ' + endpoint));
+          }
+        } catch (err) {
+          reject(err);
+        }
+      }, 100); // Simulate network latency
+    });
+  }
+  
+  // Real API mode
   return new Promise((resolve, reject) => {
     const options = {
       hostname: 'api.mercury.com',
@@ -140,7 +185,12 @@ async function runTests() {
     }
 
     console.log('\n' + '─'.repeat(50));
-    console.log('✅ All Mercury API tests passed!');
+    if (isMock) {
+      console.log('✅ All Mercury API tests passed! (MOCK MODE)');
+      console.log('\n💡 Ready for production: Replace mock credentials with real Mercury API access');
+    } else {
+      console.log('✅ All Mercury API tests passed!');
+    }
 
   } catch (err) {
     console.error('\n❌ Test failed:', err.message);

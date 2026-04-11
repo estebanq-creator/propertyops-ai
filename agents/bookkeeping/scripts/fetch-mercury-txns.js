@@ -40,9 +40,49 @@ function getDateRange(dateStr) {
 }
 
 function makeRequest(endpoint) {
+  const orgConfig = JSON.parse(fs.readFileSync(ORG_CONFIG_PATH, 'utf8'));
+  const isMock = orgConfig.mockMode || false;
+  
+  // Mock mode
+  if (isMock) {
+    const mockMercury = require('./mock-mercury');
+    
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          if (endpoint.includes('/organizations/')) {
+            const orgId = endpoint.match(/\/organizations\/([^\/]+)/)?.[1];
+            if (endpoint.includes('/accounts/')) {
+              if (endpoint.includes('/balance')) {
+                const accountId = endpoint.match(/\/accounts\/([^\/]+)/)?.[1];
+                resolve(await mockMercury.getBalance(orgId, accountId));
+              } else if (endpoint.includes('/transactions')) {
+                const accountId = endpoint.match(/\/accounts\/([^\/]+)/)?.[1];
+                const url = new URL('https://mock.local' + endpoint);
+                const limit = parseInt(url.searchParams.get('limit') || '100');
+                resolve(await mockMercury.getTransactions(orgId, accountId, { limit }));
+              } else {
+                resolve({ id: mockMercury.ACCOUNT_DATA.id, ...mockMercury.ACCOUNT_DATA });
+              }
+            } else {
+              resolve(await mockMercury.getOrganization(orgId));
+            }
+          } else if (endpoint.includes('/accounts')) {
+            const orgId = endpoint.match(/\/organizations\/([^\/]+)/)?.[1];
+            resolve(await mockMercury.getAccounts(orgId));
+          } else {
+            reject(new Error('Unknown endpoint: ' + endpoint));
+          }
+        } catch (err) {
+          reject(err);
+        }
+      }, 100);
+    });
+  }
+  
+  // Real API mode
   return new Promise((resolve, reject) => {
     const apiKey = fs.readFileSync(API_KEY_PATH, 'utf8').trim();
-    const orgConfig = JSON.parse(fs.readFileSync(ORG_CONFIG_PATH, 'utf8'));
     
     const options = {
       hostname: 'api.mercury.com',

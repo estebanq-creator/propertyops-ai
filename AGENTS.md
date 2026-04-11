@@ -14,12 +14,13 @@ Before doing anything else:
 6. Read `agents/ceo/COMMUNICATION.md`
 7. Read `agents/ceo/GUARDRAILS.md`
 8. Read `agents/ceo/PAPERCLIP-WORKFLOW.md`
-9. Read `agents/ceo/POLICIES.md` if it exists
-10. Read `agents/ceo/METRICS.md` if it exists
-11. Read `USER.md`
-12. Read `memory/YYYY-MM-DD.md` for today and yesterday if available
-13. If in a direct main session with David, also read `MEMORY.md` and `memory/nightly/latest.qmd` if it exists
-14. Read `paperclip-api-key.json` — this is your Paperclip API key. Use `token` as the Bearer token and `baseUrl` for all Paperclip API calls (issues, agents, runs). Example: `curl -s -H "Authorization: Bearer <token>" <baseUrl>/api/...`
+9. Read `agents/ceo/MEMORY-PROMOTION.md`
+10. Read `agents/ceo/POLICIES.md` if it exists
+11. Read `agents/ceo/METRICS.md` if it exists
+12. Read `USER.md`
+13. Read `memory/YYYY-MM-DD.md` for today and yesterday if available
+14. If in a direct main session with David, also read `MEMORY.md` and `memory/nightly/latest.qmd` if it exists
+15. Read `paperclip-api-key.json` — this is your Paperclip API key. Use `token` as the Bearer token and `baseUrl` for all Paperclip API calls (issues, agents, runs). Example: `curl -s -H "Authorization: Bearer <token>" <baseUrl>/api/...`
 
 Do this without asking.
 
@@ -57,10 +58,12 @@ Hermes should not:
 Use files, not intention.
 
 - Built-in memory lives in `/Users/david/.openclaw/vault-main/BUILTIN_MEMORY.md`
-- Daily notes live in `memory/YYYY-MM-DD.md`
+- CEO working notes live in `memory/YYYY-MM-DD.md` and adjacent dated workspace notes under `memory/`
 - Curated long-term memory lives in `MEMORY.md`
-- When something should persist, write it down
-- When a rule or lesson is reusable, update the relevant workspace file
+- Workspace `memory/` is working memory, not canonical durable memory
+- Durable memory promotion must follow `agents/ceo/MEMORY-PROMOTION.md`
+- When something should persist, write it down first in workspace memory, then promote it through the governed queue if it belongs in durable memory
+- When a rule or lesson is reusable, do not silently treat the workspace note as canonical truth
 
 Only load `MEMORY.md` in direct main sessions. Do not load it in shared or public contexts.
 

@@ -75,67 +75,377 @@ function matchPayoutToDeposit(payout, transactions) {
   };
 }
 
+/**
+ * Enhanced Transaction Categorization Engine
+ * v2.0 - Extended vendor patterns, improved accuracy
+ * 
+ * Categories:
+ *   - Revenue: SaaS, consulting, refunds
+ *   - Infrastructure: Hosting, database, email, CDN, monitoring
+ *   - Sales & Marketing: CRM, ads, analytics, content
+ *   - Product & Engineering: Tools, dev services, version control
+ *   - Operations: Accounting, comms, productivity, legal
+ *   - Payroll: Salaries, benefits, contractors
+ *   - Fees: Processing, bank, platform fees
+ *   - Transfers: Internal movements
+ */
 function categorizeTransaction(txn) {
   const description = (txn.description + ' ' + (txn.counterpartyName || '')).toLowerCase();
   const amount = txn.amount;
   
-  // Revenue
-  if (description.includes('stripe') || description.includes('payout')) {
+  // Vendor patterns with confidence levels
+  // Higher confidence patterns should be checked first
+  
+  // ==================== REVENUE ====================
+  
+  // Stripe payouts (primary revenue)
+  if (description.includes('stripe') && description.includes('payout')) {
+    return { category: 'Revenue', subcategory: 'SaaS Subscriptions', confidence: 0.98 };
+  }
+  if (description.includes('stripe') && !description.includes('atlas') && !description.includes('fee')) {
+    return { category: 'Revenue', subcategory: 'SaaS Subscriptions', confidence: 0.92 };
+  }
+  
+  // Other payment processors
+  if (description.includes('paddle') || description.includes('lemon squeezy')) {
     return { category: 'Revenue', subcategory: 'SaaS Subscriptions', confidence: 0.95 };
   }
-  
-  // Infrastructure
-  if (description.includes('vercel')) {
-    return { category: 'Infrastructure', subcategory: 'Hosting', confidence: 0.98 };
-  }
-  if (description.includes('railway')) {
-    return { category: 'Infrastructure', subcategory: 'Hosting', confidence: 0.98 };
-  }
-  if (description.includes('supabase')) {
-    return { category: 'Infrastructure', subcategory: 'Database', confidence: 0.98 };
-  }
-  if (description.includes('sendgrid') || description.includes('postmark')) {
-    return { category: 'Infrastructure', subcategory: 'Email', confidence: 0.95 };
-  }
-  if (description.includes('uptime') || description.includes('pingdom') || description.includes('statuspage')) {
-    return { category: 'Infrastructure', subcategory: 'Monitoring', confidence: 0.90 };
+  if (description.includes('paypal') && description.includes('payment')) {
+    return { category: 'Revenue', subcategory: 'SaaS Subscriptions', confidence: 0.88 };
   }
   
-  // Sales & Marketing
-  if (description.includes('hubspot')) {
-    return { category: 'Sales & Marketing', subcategory: 'CRM', confidence: 0.98 };
-  }
-  if (description.includes('google ads') || description.includes('facebook ads')) {
-    return { category: 'Sales & Marketing', subcategory: 'Advertising', confidence: 0.95 };
+  // Refunds
+  if (description.includes('refund')) {
+    return { category: 'Revenue', subcategory: 'Refunds', confidence: 0.95, isRefund: true };
   }
   
-  // Operations
-  if (description.includes('quickbooks') || description.includes('xero')) {
-    return { category: 'Operations', subcategory: 'Accounting Software', confidence: 0.98 };
-  }
-  if (description.includes('slack')) {
-    return { category: 'Operations', subcategory: 'Communication', confidence: 0.95 };
-  }
-  if (description.includes('notion')) {
-    return { category: 'Operations', subcategory: 'Productivity', confidence: 0.95 };
-  }
+  // ==================== LEGAL ====================
   
-  // Legal
-  if (description.includes('registered agent') || description.includes('legalzoom') || description.includes('stripe atlas')) {
+  // Entity maintenance (check before Stripe to avoid misclassification)
+  if (description.includes('registered agent') || description.includes('stripe atlas') || 
+      description.includes('legalzoom') || description.includes('zenbusiness') ||
+      description.includes('delaware') || description.includes('incfile')) {
     return { category: 'Legal', subcategory: 'Entity Maintenance', confidence: 0.95 };
   }
   
-  // Fees
-  if (description.includes('fee') || description.includes('charge')) {
-    return { category: 'Fees', subcategory: 'Processing Fees', confidence: 0.80 };
+  // Legal services
+  if (description.includes('counsel') || description.includes('attorney') || 
+      description.includes('legal service')) {
+    return { category: 'Legal', subcategory: 'Legal Services', confidence: 0.90 };
   }
   
-  // Transfers
-  if (description.includes('transfer') || description.includes('ach')) {
-    return { category: 'Transfers', subcategory: 'Internal Transfer', confidence: 0.70 };
+  // ==================== INFRASTRUCTURE ====================
+  
+  // Hosting & Cloud
+  if (description.includes('vercel')) {
+    return { category: 'Infrastructure', subcategory: 'Hosting', confidence: 0.99 };
+  }
+  if (description.includes('railway')) {
+    return { category: 'Infrastructure', subcategory: 'Hosting', confidence: 0.99 };
+  }
+  if (description.includes('render')) {
+    return { category: 'Infrastructure', subcategory: 'Hosting', confidence: 0.98 };
+  }
+  if (description.includes('fly.io') || description.includes('flyio')) {
+    return { category: 'Infrastructure', subcategory: 'Hosting', confidence: 0.98 };
+  }
+  if (description.includes('heroku')) {
+    return { category: 'Infrastructure', subcategory: 'Hosting', confidence: 0.98 };
+  }
+  if (description.includes('digitalocean') || description.includes('digital ocean')) {
+    return { category: 'Infrastructure', subcategory: 'Hosting', confidence: 0.98 };
+  }
+  if (description.includes('aws') || description.includes('amazon web service')) {
+    return { category: 'Infrastructure', subcategory: 'Hosting', confidence: 0.95 };
+  }
+  if (description.includes('gcp') || description.includes('google cloud') || description.includes('google compute')) {
+    return { category: 'Infrastructure', subcategory: 'Hosting', confidence: 0.95 };
+  }
+  if (description.includes('azure') || description.includes('microsoft azure')) {
+    return { category: 'Infrastructure', subcategory: 'Hosting', confidence: 0.95 };
   }
   
-  // Unknown - flag for review
+  // Database & Storage
+  if (description.includes('supabase')) {
+    return { category: 'Infrastructure', subcategory: 'Database', confidence: 0.99 };
+  }
+  if (description.includes('planetscale') || description.includes('planet scale')) {
+    return { category: 'Infrastructure', subcategory: 'Database', confidence: 0.98 };
+  }
+  if (description.includes('neon') && (description.includes('postgres') || description.includes('database'))) {
+    return { category: 'Infrastructure', subcategory: 'Database', confidence: 0.98 };
+  }
+  if (description.includes('mongo') || description.includes('atlas')) {
+    return { category: 'Infrastructure', subcategory: 'Database', confidence: 0.95 };
+  }
+  if (description.includes('redis') || description.includes('upstash')) {
+    return { category: 'Infrastructure', subcategory: 'Database', confidence: 0.95 };
+  }
+  if (description.includes('s3') || description.includes('cloudstorage') || description.includes('cloud storage')) {
+    return { category: 'Infrastructure', subcategory: 'Storage', confidence: 0.90 };
+  }
+  
+  // Email Services
+  if (description.includes('sendgrid')) {
+    return { category: 'Infrastructure', subcategory: 'Email', confidence: 0.98 };
+  }
+  if (description.includes('postmark')) {
+    return { category: 'Infrastructure', subcategory: 'Email', confidence: 0.98 };
+  }
+  if (description.includes('mailgun')) {
+    return { category: 'Infrastructure', subcategory: 'Email', confidence: 0.98 };
+  }
+  if (description.includes('resend')) {
+    return { category: 'Infrastructure', subcategory: 'Email', confidence: 0.98 };
+  }
+  if (description.includes('amazon ses') || description.includes('aws ses')) {
+    return { category: 'Infrastructure', subcategory: 'Email', confidence: 0.95 };
+  }
+  
+  // CDN & Security
+  if (description.includes('cloudflare')) {
+    return { category: 'Infrastructure', subcategory: 'CDN & Security', confidence: 0.99 };
+  }
+  if (description.includes('fastly')) {
+    return { category: 'Infrastructure', subcategory: 'CDN & Security', confidence: 0.98 };
+  }
+  if (description.includes('bunny.net') || description.includes('bunnycdn')) {
+    return { category: 'Infrastructure', subcategory: 'CDN & Security', confidence: 0.95 };
+  }
+  
+  // Monitoring & Observability
+  if (description.includes('sentry')) {
+    return { category: 'Infrastructure', subcategory: 'Monitoring', confidence: 0.98 };
+  }
+  if (description.includes('datadog')) {
+    return { category: 'Infrastructure', subcategory: 'Monitoring', confidence: 0.98 };
+  }
+  if (description.includes('pingdom')) {
+    return { category: 'Infrastructure', subcategory: 'Monitoring', confidence: 0.98 };
+  }
+  if (description.includes('statuspage') || description.includes('status page')) {
+    return { category: 'Infrastructure', subcategory: 'Monitoring', confidence: 0.98 };
+  }
+  if (description.includes('uptime robot') || description.includes('uptimerobot')) {
+    return { category: 'Infrastructure', subcategory: 'Monitoring', confidence: 0.95 };
+  }
+  if (description.includes('pagerduty') || description.includes('pager duty')) {
+    return { category: 'Infrastructure', subcategory: 'Monitoring', confidence: 0.98 };
+  }
+  
+  // ==================== SALES & MARKETING ====================
+  
+  // CRM
+  if (description.includes('hubspot')) {
+    return { category: 'Sales & Marketing', subcategory: 'CRM', confidence: 0.99 };
+  }
+  if (description.includes('salesforce')) {
+    return { category: 'Sales & Marketing', subcategory: 'CRM', confidence: 0.98 };
+  }
+  if (description.includes('pipedrive')) {
+    return { category: 'Sales & Marketing', subcategory: 'CRM', confidence: 0.98 };
+  }
+  if (description.includes('close') && description.includes('crm')) {
+    return { category: 'Sales & Marketing', subcategory: 'CRM', confidence: 0.95 };
+  }
+  
+  // Advertising
+  if (description.includes('google ads')) {
+    return { category: 'Sales & Marketing', subcategory: 'Advertising', confidence: 0.99 };
+  }
+  if (description.includes('facebook ads') || description.includes('meta ads')) {
+    return { category: 'Sales & Marketing', subcategory: 'Advertising', confidence: 0.99 };
+  }
+  if (description.includes('linkedin ads') || description.includes('linkedin advertising')) {
+    return { category: 'Sales & Marketing', subcategory: 'Advertising', confidence: 0.98 };
+  }
+  if (description.includes('twitter ads') || description.includes('x ads')) {
+    return { category: 'Sales & Marketing', subcategory: 'Advertising', confidence: 0.95 };
+  }
+  if (description.includes('reddit ads')) {
+    return { category: 'Sales & Marketing', subcategory: 'Advertising', confidence: 0.95 };
+  }
+  
+  // Analytics
+  if (description.includes('amplitude')) {
+    return { category: 'Sales & Marketing', subcategory: 'Analytics', confidence: 0.98 };
+  }
+  if (description.includes('mixpanel')) {
+    return { category: 'Sales & Marketing', subcategory: 'Analytics', confidence: 0.98 };
+  }
+  if (description.includes('posthog')) {
+    return { category: 'Sales & Marketing', subcategory: 'Analytics', confidence: 0.98 };
+  }
+  
+  // Content & SEO
+  if (description.includes('buzzsprout') || description.includes('transistor')) {
+    return { category: 'Sales & Marketing', subcategory: 'Content', confidence: 0.95 };
+  }
+  if (description.includes('ahrefs') || description.includes('semrush')) {
+    return { category: 'Sales & Marketing', subcategory: 'SEO Tools', confidence: 0.95 };
+  }
+  
+  // ==================== PRODUCT & ENGINEERING ====================
+  
+  // Project Management
+  if (description.includes('linear')) {
+    return { category: 'Product & Engineering', subcategory: 'Project Management', confidence: 0.99 };
+  }
+  if (description.includes('jira')) {
+    return { category: 'Product & Engineering', subcategory: 'Project Management', confidence: 0.98 };
+  }
+  if (description.includes('asana')) {
+    return { category: 'Product & Engineering', subcategory: 'Project Management', confidence: 0.98 };
+  }
+  if (description.includes('monday.com') || description.includes('monday com')) {
+    return { category: 'Product & Engineering', subcategory: 'Project Management', confidence: 0.98 };
+  }
+  
+  // Version Control
+  if (description.includes('github')) {
+    return { category: 'Product & Engineering', subcategory: 'Version Control', confidence: 0.99 };
+  }
+  if (description.includes('gitlab')) {
+    return { category: 'Product & Engineering', subcategory: 'Version Control', confidence: 0.98 };
+  }
+  if (description.includes('bitbucket')) {
+    return { category: 'Product & Engineering', subcategory: 'Version Control', confidence: 0.98 };
+  }
+  
+  // CI/CD
+  if (description.includes('circleci')) {
+    return { category: 'Product & Engineering', subcategory: 'CI/CD', confidence: 0.98 };
+  }
+  if (description.includes('travis ci')) {
+    return { category: 'Product & Engineering', subcategory: 'CI/CD', confidence: 0.95 };
+  }
+  
+  // Design
+  if (description.includes('figma')) {
+    return { category: 'Product & Engineering', subcategory: 'Design', confidence: 0.99 };
+  }
+  if (description.includes('canva')) {
+    return { category: 'Product & Engineering', subcategory: 'Design', confidence: 0.95 };
+  }
+  
+  // ==================== OPERATIONS ====================
+  
+  // Accounting
+  if (description.includes('quickbooks')) {
+    return { category: 'Operations', subcategory: 'Accounting Software', confidence: 0.99 };
+  }
+  if (description.includes('xero')) {
+    return { category: 'Operations', subcategory: 'Accounting Software', confidence: 0.98 };
+  }
+  if (description.includes('freshbooks')) {
+    return { category: 'Operations', subcategory: 'Accounting Software', confidence: 0.98 };
+  }
+  if (description.includes('wave accounting')) {
+    return { category: 'Operations', subcategory: 'Accounting Software', confidence: 0.95 };
+  }
+  
+  // Communication
+  if (description.includes('slack')) {
+    return { category: 'Operations', subcategory: 'Communication', confidence: 0.99 };
+  }
+  if (description.includes('discord') && description.includes('nitro')) {
+    return { category: 'Operations', subcategory: 'Communication', confidence: 0.95 };
+  }
+  if (description.includes('zoom')) {
+    return { category: 'Operations', subcategory: 'Communication', confidence: 0.98 };
+  }
+  if (description.includes('google workspace') || description.includes('g suite')) {
+    return { category: 'Operations', subcategory: 'Communication', confidence: 0.95 };
+  }
+  if (description.includes('microsoft 365') || description.includes('office 365')) {
+    return { category: 'Operations', subcategory: 'Communication', confidence: 0.95 };
+  }
+  
+  // Productivity
+  if (description.includes('notion')) {
+    return { category: 'Operations', subcategory: 'Productivity', confidence: 0.99 };
+  }
+  if (description.includes('airtable')) {
+    return { category: 'Operations', subcategory: 'Productivity', confidence: 0.98 };
+  }
+  if (description.includes('coda')) {
+    return { category: 'Operations', subcategory: 'Productivity', confidence: 0.95 };
+  }
+  if (description.includes('loom')) {
+    return { category: 'Operations', subcategory: 'Productivity', confidence: 0.95 };
+  }
+  
+  // ==================== PAYROLL ====================
+  
+  if (description.includes('gusto')) {
+    return { category: 'Payroll', subcategory: 'Salary & Wages', confidence: 0.99 };
+  }
+  if (description.includes('payroll')) {
+    return { category: 'Payroll', subcategory: 'Salary & Wages', confidence: 0.95 };
+  }
+  if (description.includes('deel')) {
+    return { category: 'Payroll', subcategory: 'Contractor Payments', confidence: 0.98 };
+  }
+  if (description.includes('remote') && description.includes('team')) {
+    return { category: 'Payroll', subcategory: 'Contractor Payments', confidence: 0.95 };
+  }
+  if (description.includes('ripcurl') || description.includes('rip curl')) {
+    return { category: 'Payroll', subcategory: 'Contractor Payments', confidence: 0.95 };
+  }
+  if (description.includes('adp') && description.includes('payroll')) {
+    return { category: 'Payroll', subcategory: 'Salary & Wages', confidence: 0.95 };
+  }
+  
+  // ==================== FEES ====================
+  
+  // Stripe fees
+  if (description.includes('stripe') && description.includes('fee')) {
+    return { category: 'Fees', subcategory: 'Payment Processing', confidence: 0.98 };
+  }
+  
+  // Bank fees
+  if (description.includes('bank fee') || description.includes('wire fee') || 
+      description.includes('ach fee') || description.includes('monthly fee')) {
+    return { category: 'Fees', subcategory: 'Bank Fees', confidence: 0.90 };
+  }
+  
+  // Generic processing fees
+  if (description.includes('processing fee') || description.includes('transaction fee')) {
+    return { category: 'Fees', subcategory: 'Processing Fees', confidence: 0.85 };
+  }
+  
+  // ==================== TRANSFERS ====================
+  
+  if (description.includes('transfer')) {
+    return { category: 'Transfers', subcategory: 'Internal Transfer', confidence: 0.80 };
+  }
+  if (description.includes('ach') && !description.includes('fee')) {
+    return { category: 'Transfers', subcategory: 'Internal Transfer', confidence: 0.75 };
+  }
+  
+  // ==================== INSURANCE ====================
+  
+  if (description.includes('insurance') && (description.includes('premium') || description.includes('policy'))) {
+    return { category: 'Operations', subcategory: 'Insurance', confidence: 0.90 };
+  }
+  
+  // ==================== TAXES ====================
+  
+  if (description.includes('tax payment') || description.includes('irs') || 
+      description.includes('state tax') || description.includes('sales tax')) {
+    return { category: 'Operations', subcategory: 'Tax Payments', confidence: 0.92 };
+  }
+  
+  // ==================== SUBSCRIPTION SERVICES ====================
+  
+  // Catch-all for known SaaS patterns
+  if (description.match(/\b(subscription|monthly|annual|renewal)\b/i)) {
+    return { category: 'Operations', subcategory: 'Subscriptions', confidence: 0.70 };
+  }
+  
+  // ==================== UNKNOWN ====================
+  
+  // Flag for manual review
   return { category: 'Unknown', subcategory: 'Requires Review', confidence: 0.0 };
 }
 

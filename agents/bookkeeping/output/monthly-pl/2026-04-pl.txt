@@ -1,0 +1,55 @@
+
+PROPERTYOPS AI — MONTHLY P&L
+April 2026
+Generated: 4/8/2026
+
+═══════════════════════════════════════════════════════════
+
+REVENUE
+───────────────────────────────────────────────────────────
+  Total Cash Collected:     $2877.66
+  
+  Breakdown:
+    MRR Subscriptions:      $2877.66
+
+EXPENSES
+───────────────────────────────────────────────────────────
+  Infrastructure:           $561.41
+  Sales & Marketing:        $160.76
+  Operations:               $0.00
+  Legal:                    $0.00
+  Fees:                     $0.00
+  Other:                    $31553.79
+  ─────────────────────────────────────────────────────────
+  TOTAL EXPENSES:           $32275.96
+
+NET
+───────────────────────────────────────────────────────────
+  Gross Profit:             $-29398.30
+  Gross Margin:             -1021.6%
+
+BURN vs. TARGET
+───────────────────────────────────────────────────────────
+  Actual Burn:              $968278.80
+  Target Burn:              $430.00–$680.00
+  Status:                   Over Target by $967598.8
+
+CASH POSITION
+───────────────────────────────────────────────────────────
+  Mercury Balance:          $0.00
+  Estimated Runway:         N/A months
+
+DATA QUALITY
+───────────────────────────────────────────────────────────
+  Total Transactions:       15
+  Uncategorized:            0
+  Accuracy:                 100.0%
+
+═══════════════════════════════════════════════════════════
+
+NOTES:
+- Generated from daily reconciliation reports
+- Discrepancies >$100 flagged in daily reports
+- Review unknown transactions before month-end close
+- Route to David for review by 3rd business day
+

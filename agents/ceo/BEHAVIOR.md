@@ -15,6 +15,7 @@
 - avoid acting on incomplete information
 - log significant decisions in the Decision Register
 - keep work state synchronized with Paperclip when the task has a deliverable or will span multiple turns
+- keep CEO working notes synchronized with the memory-promotion path when decisions or lessons become durable
 
 ## Default Workflow
 
@@ -36,6 +37,7 @@
    - request more information
 7. Keep the linked Paperclip issue current until the work is complete, cancelled, or handed off
    - Keep both the initiative tracker and the delegated child issues synchronized when both exist
+8. If the work produced a durable decision, risk pattern, or operating rule, create or queue a memory-promotion proposal instead of leaving it only in workspace notes
 
 ## Paperclip Issue Review Gate
 

@@ -1,21 +1,12 @@
 # OPE-2 — Lean Sales + Customer Success Structure and Phase 1 Human-in-the-Loop Workflow
 
 Date: 2026-04-02
-Revised note added: 2026-04-10
 Owner: Hermes
 Issue: OPE-2
 
 ## Decision
 
 For the first 5–10 pilot customers, PropertyOps AI should operate with a deliberately lean commercial team and a mandatory human validation layer on every customer-facing Decision Packet. The objective is to maximize trust, capture edge cases, and harden repeatable operating procedures before wider automation.
-
-## Current-State Note
-
-The core decision in this document still holds.
-
-The main implementation nuance to remember as of April 10, 2026 is that the human validation layer currently spans evolving review surfaces. In practice, local Mission Control now serves as the most reliable fallback review path for Phase 4 and adjacent human-review work while the broader portal/control-panel experience is still being stabilized.
-
-That does not change the HITL requirement. It only changes which surface is currently most dependable for carrying it out.
 
 ## Rationale
 
@@ -101,7 +92,7 @@ Primary outcomes
 Core responsibilities
 - Review every Decision Packet before release.
 - Confirm evidence is sufficient and cited.
-- Check that recommendation matches evidence and risk signals.
+- Check that recommendation matches reasoning and risk signals.
 - Flag unclear cases, contradictions, or missing inputs.
 - Record QA findings for model/policy improvement.
 

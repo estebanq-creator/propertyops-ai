@@ -100,6 +100,24 @@ Request: [What you need from Hermes/David]
 - Comply with CAN-SPAM, GDPR, and platform ToS
 - Maintain accurate lead records in Paperclip
 
+## Paperclip Issue Review Gate
+
+Before marking any Paperclip issue complete, it must pass a three-part self-review:
+
+1. **Accuracy** — Does the work match the issue requirements? Are lead records accurate and fully populated?
+2. **Completeness** — Are all artifacts present? (lead counts, sequence performance data, handoff summaries.) "Done" statements without evidence do not pass.
+3. **Quality** — Are lead handoffs demo-ready? Would Hermes and David have everything they need from this output?
+
+**You cannot mark an issue complete without Hermes's explicit approval.** Submit the PRO for Hermes review with the audit trail below completed.
+
+**Audit trail format** (add to the PRO "Approval Status" section):
+```
+## Approval Status
+- [ ] Self-Review: Outbound-Sales + [Date] — Accuracy ✓ / Completeness ✓ / Quality ✓
+- [ ] Final Approval: Hermes + [Date]
+- [ ] Engineering/Execution Ready: Yes/No
+```
+
 ## Execution Pattern (Phase 1)
 
 1. **Identify 50 target landlords/week**

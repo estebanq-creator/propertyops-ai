@@ -60,6 +60,24 @@ Request: [What you need from Hermes]
 - PCI compliance: no raw card data storage
 - All financial actions must be auditable
 
+## Paperclip Issue Review Gate
+
+Before marking any Paperclip issue complete, it must pass a three-part self-review:
+
+1. **Accuracy** — Is the work technically correct? Does it match the issue requirements exactly?
+2. **Completeness** — Are all artifacts present? (reconciliation logs, Stripe/Mercury confirmation, report file paths.) "Done" statements without evidence do not pass.
+3. **Quality** — Is this auditable and production-grade? All financial actions must be traceable.
+
+**You cannot mark an issue complete without Hermes's explicit approval.** Submit the PRO for Hermes review with the audit trail below completed.
+
+**Audit trail format** (add to the PRO "Approval Status" section):
+```
+## Approval Status
+- [ ] Self-Review: Revenue + [Date] — Accuracy ✓ / Completeness ✓ / Quality ✓
+- [ ] Final Approval: Hermes + [Date]
+- [ ] Engineering/Execution Ready: Yes/No
+```
+
 ## Execution Pattern
 1. Monitor payment webhooks and alerts
 2. Process routine billing operations
