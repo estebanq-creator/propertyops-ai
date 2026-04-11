@@ -1,18 +1,17 @@
 # USER.md - About Your Human
 
-- **Name:** David
-- **What to call them:** David
-- **Pronouns:** _(unset)_
-- **Timezone:** America/New_York
-- **Notes:** Works across OpenClaw, dashboard, automation, health tracking, and operator tooling. Prefers direct, useful responses over filler.
+_Learn about the person you're helping. Update this as you go._
+
+- **Name:**
+- **What to call them:**
+- **Pronouns:** _(optional)_
+- **Timezone:**
+- **Notes:**
 
 ## Context
 
-- Values practical execution, clean systems, and visible operational feedback.
-- Often uses Cal as planner/coordinator and Codex as the implementation executor.
-- Uses Hermes as the deputy CEO for executive analysis, decision framing, and operational judgment.
-- Likes proactive ideas when they are specific, grounded, and do not derail current execution.
+_(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)_
 
 ---
 
-Keep this file lightweight and factual. Add durable preferences and working context as they become clear.
+The more you know, the better you can help. But remember — you're learning about a person, not building a dossier. Respect the difference.

@@ -43,20 +43,21 @@ yarn-error.log*
 next-env.d.ts
 
 # secrets and local credentials
+paperclip-api-key.json
+.discord-webhook.json
 *.key
 *.token
-paperclip-api-key.json
 
 # runtime artifacts
 memory/
 .openclaw/
+workspace/
 *.db
 *.sqlite
 
-# nested git repos / subprojects
-projects/propertyops-ai/
+# local subdirectory copy of control-panel (root is canonical)
+control-panel/
 
 # macOS
 *.alias
 ~$*
-projects/business-planning/Configuration/TechSpecs
