@@ -124,12 +124,14 @@ This is an operational decision record, not a historical inventory.
 - secondary integration profile
 - potentially useful for local experimentation or future redesign
 - not the current authoritative Paperclip board runtime unless explicitly re-designated
+- deprecated pending retirement after observation window
 
 **Operational rule:**
 
 - when troubleshooting live Paperclip board behavior, auth callbacks, logs, or server health, inspect `instances/default/` first
 - do not assume `openclaw-local` is the active runtime just because it references OpenClaw
 - keep `context.json` on `default` unless the runtime itself is intentionally migrated
+- do not treat `openclaw-local` as required for secret continuity anymore; `default` now owns its own secret path
 
 **Incident owner default:**
 
@@ -147,6 +149,7 @@ This is an operational decision record, not a historical inventory.
 
 - earlier reviews flagged a duplicate copy under `vault-main`
 - as of this decision record, that duplicate was not present in the live filesystem check
+- the live Hermes workspace credential path is `/Users/david/.openclaw/workspace-hermes/paperclip-api-key.json`
 
 **Operational rule:**
 
