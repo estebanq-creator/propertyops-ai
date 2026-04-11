@@ -1,0 +1,1 @@
+- Agent-to-agent messaging is disabled. Re-assign and re-prioritize agent tasks manually via Paperclip board.

@@ -1,0 +1,742 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-07T17:19:51.932Z",
+  "entries": {
+    "memory:memory/2026-04-05.md:42:62": {
+      "key": "memory:memory/2026-04-05.md:42:62",
+      "path": "memory/2026-04-05.md",
+      "startLine": 42,
+      "endLine": 62,
+      "source": "memory",
+      "snippet": "2. **Compliance Hire Gap:** PRO-7 (Head of Compliance & Regulatory Strategy) in backlog. Critical for maintaining Fair Housing posture as Laura scales. - **Impact:** Fair Housing counsel validation required before Phase 1 launch. Delay increases regulatory exposure if Laura scales without oversight. - **Recommendation:** Elevate to David for approval this week. 3. **Bookkeeping Agent Activation:** PRO-14 assigned to Bookkeeping Agent (d69dc845) but in `backlog`. Daily Stripe/Mercury reconciliation not yet active. - **Impact:** Financial reconciliation gap — no automated P&L tracking. - **Recommendation:** Activate after CodeGen completes Stripe/Mercury API connectors (in progres",
+      "recallCount": 38,
+      "dailyCount": 0,
+      "totalScore": 18.483523516976714,
+      "maxScore": 0.7327217052969939,
+      "firstRecalledAt": "2026-04-06T14:29:14.668Z",
+      "lastRecalledAt": "2026-04-07T16:17:04.280Z",
+      "queryHashes": [
+        "0b1b22e9ec5c",
+        "7ea73afba679",
+        "ff68e2389597",
+        "327be2a62e9d",
+        "87afdbf8c416",
+        "cfa7b105afaf",
+        "9a6de0c57513",
+        "37e10e4547d4",
+        "1bdbc7dd0c6d",
+        "317af7350f9c",
+        "f4216fd2c6b4",
+        "2160d7199ba8",
+        "d6e22cb79c18",
+        "6410f5356411",
+        "4d5896a07ab9",
+        "346459c17966",
+        "26a88ec5548b",
+        "aedb0f7d672c"
+      ],
+      "recallDays": [
+        "2026-04-06",
+        "2026-04-07"
+      ],
+      "conceptTags": [
+        "pro-7",
+        "pro-14",
+        "stripe/mercury",
+        "compliance",
+        "hire",
+        "gap",
+        "pro",
+        "head"
+      ]
+    },
+    "memory:memory/2026-04-05.md:56:69": {
+      "key": "memory:memory/2026-04-05.md:56:69",
+      "path": "memory/2026-04-05.md",
+      "startLine": 56,
+      "endLine": 69,
+      "source": "memory",
+      "snippet": "| PRO-14 Activation Timing | Bookkeeping agent ready but not executing | Financial reconciliation gap | Activate after CodeGen completes Stripe/Mercury connectors | ### Memory Updates - Competitive Intelligence Briefing #1 completed (April 5 baseline) - PRO-11 protocol documented, first nightly report pending (11:00 PM EDT tonight) - Fleet activation complete (PRO-12 done), but PRO-6 onboarding not yet initiated - No critical exceptions at 9:49 PM EDT heartbeat --- **Next Heartbeat:** 11:00 PM EDT — Nightly Exception Report generation **Escalations to David:** None at this heartbeat (will bundle in nightly report at 11:00 PM EDT)",
+      "recallCount": 42,
+      "dailyCount": 0,
+      "totalScore": 20.018271487636067,
+      "maxScore": 0.7255375603962133,
+      "firstRecalledAt": "2026-04-06T14:29:14.668Z",
+      "lastRecalledAt": "2026-04-07T16:17:04.280Z",
+      "queryHashes": [
+        "0b1b22e9ec5c",
+        "13ef8406061e",
+        "2969f59e2335",
+        "68be4d500304",
+        "f6f1d392c4dc",
+        "7ea73afba679",
+        "ff68e2389597",
+        "327be2a62e9d",
+        "87afdbf8c416",
+        "cfa7b105afaf",
+        "37e10e4547d4",
+        "6e0934498210",
+        "b85fa3197c76",
+        "1bdbc7dd0c6d",
+        "317af7350f9c",
+        "f4216fd2c6b4",
+        "723353d5322b",
+        "d6e22cb79c18",
+        "6410f5356411",
+        "89563a1c2581",
+        "26a88ec5548b",
+        "aedb0f7d672c"
+      ],
+      "recallDays": [
+        "2026-04-06",
+        "2026-04-07"
+      ],
+      "conceptTags": [
+        "pro-14",
+        "stripe/mercury",
+        "pro-11",
+        "pro-12",
+        "pro-6",
+        "pro",
+        "activation",
+        "timing"
+      ]
+    },
+    "memory:memory/2026-04-06.md:43:68": {
+      "key": "memory:memory/2026-04-06.md:43:68",
+      "path": "memory/2026-04-06.md",
+      "startLine": 43,
+      "endLine": 68,
+      "source": "memory",
+      "snippet": "- **Recommendation:** Assign Onboarding Agent (PRO-8 complete) and initiate checkout within 24 hours. 2. **Compliance Hire Gap:** PRO-7 (Head of Compliance & Regulatory Strategy) in backlog. Critical for maintaining Fair Housing posture as Laura scales. - **Impact:** Fair Housing counsel validation required before Phase 1 launch. Delay increases regulatory exposure if Laura scales without oversight. - **Recommendation:** Elevate to David for approval this week. 3. **Bookkeeping Agent Activation:** PRO-14 assigned to Ops agent (d69dc845-5bc0-4dea-a355-b904b1d96098) and now in progress. Daily Stripe/Mercury reconciliation initiated. - **Status:** Execution started 7:54 AM EDT. Mo",
+      "recallCount": 7,
+      "dailyCount": 0,
+      "totalScore": 3.032627299427986,
+      "maxScore": 0.435624435544014,
+      "firstRecalledAt": "2026-04-06T14:29:14.668Z",
+      "lastRecalledAt": "2026-04-06T21:06:01.570Z",
+      "queryHashes": [
+        "0b1b22e9ec5c",
+        "7ea73afba679"
+      ],
+      "recallDays": [
+        "2026-04-06"
+      ],
+      "conceptTags": [
+        "pro-8",
+        "pro-7",
+        "pro-14",
+        "stripe/mercury",
+        "recommendation",
+        "assign",
+        "onboarding",
+        "pro"
+      ]
+    },
+    "memory:memory/2026-04-06.md:25:46": {
+      "key": "memory:memory/2026-04-06.md:25:46",
+      "path": "memory/2026-04-06.md",
+      "startLine": 25,
+      "endLine": 46,
+      "source": "memory",
+      "snippet": "**Next Action:** Generate first nightly report at 11:00 PM EDT via cron-triggered heartbeat. ### Department Agent Escalations **No escalations received** from department agents (ProdEng, Revenue, Ops, Intel) in this heartbeat window. **Bookkeeping Agent (PRO-14):** Started execution at 7:54 AM EDT. Working on Stripe/Mercury API connectors for daily reconciliation. No exceptions flagged. **Intel Agent:** Weekly Competitive Briefing #1 completed April 5 (baseline established). Next briefing due April 12. No critical threats detected. **QA Agent:** No drift alerts or anomaly flags submitted. All agents operating within green thresholds (<5% deviation). **Onboarding Agent:** PRO-8 complete",
+      "recallCount": 11,
+      "dailyCount": 0,
+      "totalScore": 4.585584196448327,
+      "maxScore": 0.4911008179187774,
+      "firstRecalledAt": "2026-04-06T14:29:14.668Z",
+      "lastRecalledAt": "2026-04-06T21:07:21.596Z",
+      "queryHashes": [
+        "0b1b22e9ec5c",
+        "13ef8406061e",
+        "2969f59e2335",
+        "f6f1d392c4dc",
+        "7ea73afba679",
+        "163c12ed1881"
+      ],
+      "recallDays": [
+        "2026-04-06"
+      ],
+      "conceptTags": [
+        "cron-triggered",
+        "pro-14",
+        "stripe/mercury",
+        "pro-8",
+        "action",
+        "generate",
+        "first",
+        "nightly"
+      ]
+    },
+    "memory:memory/2026-04-06.md:61:96": {
+      "key": "memory:memory/2026-04-06.md:61:96",
+      "path": "memory/2026-04-06.md",
+      "startLine": 61,
+      "endLine": 96,
+      "source": "memory",
+      "snippet": "- Competitive Intelligence Briefing #1 completed (April 5 baseline) - PRO-11 protocol documented, first nightly report pending (11:00 PM EDT tonight) - Fleet activation complete (PRO-12 done), but PRO-6 onboarding not yet initiated - PRO-14 (Bookkeeping Agent) execution started 7:54 AM EDT - No critical exceptions at 8:27 AM EDT heartbeat --- **Next Heartbeat:** 11:00 PM EDT — Nightly Exception Report generation **Escalations to David:** None at this heartbeat (will bundle in nightly report at 11:00 PM EDT) --- ## Heartbeat Run: 2:02 PM EDT ### Fleet Status Summary **Active Issues by Status:** - **In Progress (2):** - PRO-14 — Bookkeeping Agent (Ops agent, started 7:54 AM EDT, worki",
+      "recallCount": 8,
+      "dailyCount": 0,
+      "totalScore": 4.556131129269803,
+      "maxScore": 0.7526569032206784,
+      "firstRecalledAt": "2026-04-06T15:16:41.753Z",
+      "lastRecalledAt": "2026-04-06T21:07:21.596Z",
+      "queryHashes": [
+        "c71eaaf767b8",
+        "13ef8406061e",
+        "2969f59e2335",
+        "68be4d500304",
+        "f6f1d392c4dc",
+        "ff68e2389597",
+        "317af7350f9c",
+        "163c12ed1881"
+      ],
+      "recallDays": [
+        "2026-04-06"
+      ],
+      "conceptTags": [
+        "pro-11",
+        "pro-12",
+        "pro-6",
+        "pro-14",
+        "competitive",
+        "intelligence",
+        "briefing",
+        "completed"
+      ]
+    },
+    "memory:memory/2026-04-06.md:90:104": {
+      "key": "memory:memory/2026-04-06.md:90:104",
+      "path": "memory/2026-04-06.md",
+      "startLine": 90,
+      "endLine": 104,
+      "source": "memory",
+      "snippet": "3. **Company Issues Status:** - `todo`: 1 issue (PRO-6: Phase 0 Onboarding) - assigned to local-board, not an agent - `in_progress`: 2 issues (PRO-14: Bookkeeping Agent assigned to Ops agent; PRO-11: Nightly Exception Report unassigned) - `backlog`: 3 issues (PRO-7, PRO-9, PRO-13) - all unassigned ### Decision **No work available for Hermes agent.** The wake event completed with no actionable issues assigned to agent `710adcee-a06a-4a01-b383-4a557525d4a4`. ### Notes - Hermes (CEO agent) is running and healthy (last heartbeat: 2026-04-06T01:01:28.451Z, status: \"running\") - Agent has `canCreateAgents: true` permission - No issues are currently assigned to the CEO agent; all compan",
+      "recallCount": 5,
+      "dailyCount": 0,
+      "totalScore": 2.6948005812087894,
+      "maxScore": 0.773063735834682,
+      "firstRecalledAt": "2026-04-06T15:16:41.753Z",
+      "lastRecalledAt": "2026-04-06T18:02:21.316Z",
+      "queryHashes": [
+        "c71eaaf767b8",
+        "13ef8406061e",
+        "2969f59e2335",
+        "68be4d500304",
+        "f6f1d392c4dc"
+      ],
+      "recallDays": [
+        "2026-04-06"
+      ],
+      "conceptTags": [
+        "pro-6",
+        "local-board",
+        "in-progress",
+        "pro-14",
+        "pro-11",
+        "pro-7",
+        "pro-9",
+        "pro-13"
+      ]
+    },
+    "memory:memory/2026-04-05.md:24:45": {
+      "key": "memory:memory/2026-04-05.md:24:45",
+      "path": "memory/2026-04-05.md",
+      "startLine": 24,
+      "endLine": 45,
+      "source": "memory",
+      "snippet": "**Next Action:** Generate first nightly report at 11:00 PM EDT via cron-triggered heartbeat. ### Department Agent Escalations **No escalations received** from department agents (ProdEng, Revenue, Ops, Intel) in this heartbeat window. **Intel Agent:** Weekly Competitive Briefing #1 completed April 5 (baseline established). Next briefing due April 12. No critical threats detected. **QA Agent:** No drift alerts or anomaly flags submitted. All agents operating within green thresholds (<5% deviation). **Onboarding Agent:** PRO-8 complete (agent deployed), but PRO-6 (Phase 0 onboarding) remains unassigned — no customer onboarding activity initiated. ### Executive Risks 1. **PRO-6 Stall (Cri",
+      "recallCount": 14,
+      "dailyCount": 0,
+      "totalScore": 6.194339495897293,
+      "maxScore": 0.4890311777591705,
+      "firstRecalledAt": "2026-04-06T17:01:48.385Z",
+      "lastRecalledAt": "2026-04-07T16:48:52.602Z",
+      "queryHashes": [
+        "2969f59e2335",
+        "68be4d500304",
+        "f6f1d392c4dc",
+        "163c12ed1881",
+        "6e0934498210",
+        "b85fa3197c76",
+        "a527a4e47c76",
+        "f4216fd2c6b4",
+        "00dd681dc54f",
+        "5172e64887fa",
+        "723353d5322b",
+        "c5ff39b25511",
+        "15dfe947f34c"
+      ],
+      "recallDays": [
+        "2026-04-06",
+        "2026-04-07"
+      ],
+      "conceptTags": [
+        "cron-triggered",
+        "pro-8",
+        "pro-6",
+        "action",
+        "generate",
+        "first",
+        "nightly",
+        "report"
+      ]
+    },
+    "memory:memory/2026-04-06.md:1:32": {
+      "key": "memory:memory/2026-04-06.md:1:32",
+      "path": "memory/2026-04-06.md",
+      "startLine": 1,
+      "endLine": 32,
+      "source": "memory",
+      "snippet": "# 2026-04-06 ## Heartbeat Run: 8:27 AM EDT ### Fleet Status Summary **Active Issues by Status:** - **In Progress (2):** - PRO-14 — Activate Bookkeeping Agent (Ops agent d69dc845, started 7:54 AM EDT) - PRO-11 — Nightly Exception Report Protocol (protocol complete, first report pending 11:00 PM EDT) - **Todo (1):** PRO-6 — Phase 0 Onboarding (assigned to local-board, not an agent — blocking customer evidence) - **Backlog (3):** PRO-7 (Head of Compliance), PRO-9 (Fraud Intelligence Graph KPI), PRO-13 (Competitive Briefing) - **Done (8):** PRO-2, PRO-3, PRO-5, PRO-8, PRO-10, PRO-12, PRO-2 (CTO hire), PRO-10 (CTO creation) ### PRO-11: Nightly Exception Report Status **Current State:**",
+      "recallCount": 4,
+      "dailyCount": 0,
+      "totalScore": 2.1989243617125585,
+      "maxScore": 0.6676940108408285,
+      "firstRecalledAt": "2026-04-06T17:01:48.385Z",
+      "lastRecalledAt": "2026-04-06T21:07:21.585Z",
+      "queryHashes": [
+        "2969f59e2335",
+        "68be4d500304",
+        "f6f1d392c4dc",
+        "317af7350f9c"
+      ],
+      "recallDays": [
+        "2026-04-06"
+      ],
+      "conceptTags": [
+        "pro-14",
+        "pro-11",
+        "pro-6",
+        "local-board",
+        "pro-7",
+        "pro-9",
+        "pro-13",
+        "pro-2"
+      ]
+    },
+    "memory:memory/2026-04-05.md:1:31": {
+      "key": "memory:memory/2026-04-05.md:1:31",
+      "path": "memory/2026-04-05.md",
+      "startLine": 1,
+      "endLine": 31,
+      "source": "memory",
+      "snippet": "# 2026-04-05 - Daily Note ## Heartbeat Run: 9:49 PM EDT ### Fleet Status Summary **Active Issues by Status:** - **In Progress (1):** PRO-11 — Configure Nightly Exception Report Protocol (protocol complete, first report pending 11:00 PM EDT) - **Todo (1):** PRO-6 — Phase 0: Onboard First 5 Starter Tier Customers (no agent assignee — blocking customer evidence) - **Backlog (4):** PRO-7 (Head of Compliance), PRO-9 (Fraud Intelligence Graph KPI), PRO-13 (Competitive Briefing), PRO-14 (Bookkeeping Agent) - **Done (6):** PRO-2, PRO-3, PRO-5, PRO-8, PRO-10, PRO-12 - **Cancelled (1):** PRO-4 (Head of Product Operations) ### PRO-11: Nightly Exception Report Status **Current State:** Protocol ful",
+      "recallCount": 8,
+      "dailyCount": 0,
+      "totalScore": 4.075966550312856,
+      "maxScore": 0.6641521435196008,
+      "firstRecalledAt": "2026-04-06T17:01:48.385Z",
+      "lastRecalledAt": "2026-04-07T04:13:09.198Z",
+      "queryHashes": [
+        "2969f59e2335",
+        "f6f1d392c4dc",
+        "317af7350f9c",
+        "6e0934498210",
+        "f4216fd2c6b4",
+        "00dd681dc54f",
+        "723353d5322b"
+      ],
+      "recallDays": [
+        "2026-04-06",
+        "2026-04-07"
+      ],
+      "conceptTags": [
+        "pro-11",
+        "pro-6",
+        "pro-7",
+        "pro-9",
+        "pro-13",
+        "pro-14",
+        "pro-2",
+        "pro-3"
+      ]
+    },
+    "memory:memory/2026-04-04.md:1:20": {
+      "key": "memory:memory/2026-04-04.md:1:20",
+      "path": "memory/2026-04-04.md",
+      "startLine": 1,
+      "endLine": 20,
+      "source": "memory",
+      "snippet": "# Memory - April 4, 2026 ## Paperclip Adapter Configuration Issue (Resolved) **Problem:** Agent config threw error \"Instructions bundles are only available for local adapters\" **Root Cause:** Using OpenClaw gateway (remote/HTTP adapter at `http://127.0.0.1:3100`) with `instructionsFilePath` field in adapter config. Remote adapters cannot read local filesystem files. **Resolution:** - Remove `instructionsFilePath` from agent adapter configuration - Replace with inline `promptTemplate` field, or pass instructions at session creation time - Local adapters (e.g., `claude_local`) support `instructionsFilePath`; remote adapters do not **Esteban's Setup:** - Paperclip profile: `openclaw-local",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.3930765241384506,
+      "maxScore": 0.3930765241384506,
+      "firstRecalledAt": "2026-04-06T18:02:21.316Z",
+      "lastRecalledAt": "2026-04-06T18:02:21.316Z",
+      "queryHashes": [
+        "f6f1d392c4dc"
+      ],
+      "recallDays": [
+        "2026-04-06"
+      ],
+      "conceptTags": [
+        "gateway",
+        "remote/http",
+        "127.0.0.1",
+        "e.g",
+        "claude-local",
+        "openclaw-local",
+        "april",
+        "paperclip"
+      ]
+    },
+    "memory:memory/2026-04-06.md:89:123": {
+      "key": "memory:memory/2026-04-06.md:89:123",
+      "path": "memory/2026-04-06.md",
+      "startLine": 89,
+      "endLine": 123,
+      "source": "memory",
+      "snippet": "**Bookkeeping Agent (PRO-14):** Execution ongoing. Stripe/Mercury API connectors in development. No exceptions flagged. **QA Agent:** All agents operating within green thresholds (<5% deviation). No drift alerts. **Intel Agent:** Competitive Briefing #1 complete (April 5). Briefing #2 due April 12. ### Executive Risks 1. **PRO-6 Stall (Critical):** Phase 0 onboarding remains unassigned to an agent. Blocks customer evidence collection and Phase 1 transition. - **Recommendation:** Assign Onboarding Agent and initiate checkout within 24 hours. 2. **PRO-7 (Head of Compliance):** Still in backlog. Fair Housing counsel validation required before Phase 1 launch. - **Recommendation:** Ele",
+      "recallCount": 5,
+      "dailyCount": 0,
+      "totalScore": 2.2300016820430755,
+      "maxScore": 0.5175495624542236,
+      "firstRecalledAt": "2026-04-06T19:34:56.811Z",
+      "lastRecalledAt": "2026-04-06T21:06:18.491Z",
+      "queryHashes": [
+        "0b1b22e9ec5c",
+        "7ea73afba679",
+        "ff68e2389597"
+      ],
+      "recallDays": [
+        "2026-04-06"
+      ],
+      "conceptTags": [
+        "pro-14",
+        "stripe/mercury",
+        "pro-6",
+        "pro-7",
+        "bookkeeping",
+        "pro",
+        "execution",
+        "ongoing"
+      ]
+    },
+    "memory:memory/2026-04-06.md:139:151": {
+      "key": "memory:memory/2026-04-06.md:139:151",
+      "path": "memory/2026-04-06.md",
+      "startLine": 139,
+      "endLine": 151,
+      "source": "memory",
+      "snippet": "- `in_progress`: 2 issues (PRO-14: Bookkeeping Agent assigned to Ops agent; PRO-11: Nightly Exception Report unassigned) - `backlog`: 3 issues (PRO-7, PRO-9, PRO-13) - all unassigned ### Decision **No work available for Hermes agent.** The wake event completed with no actionable issues assigned to agent `710adcee-a06a-4a01-b383-4a557525d4a4`. ### Notes - Hermes (CEO agent) is running and healthy (last heartbeat: 2026-04-06T01:01:28.451Z, status: \"running\") - Agent has `canCreateAgents: true` permission - No issues are currently assigned to the CEO agent; all company issues are either assigned to other agents (Ops, etc.) or to local-board",
+      "recallCount": 8,
+      "dailyCount": 0,
+      "totalScore": 3.6683604504133887,
+      "maxScore": 0.7596819366480532,
+      "firstRecalledAt": "2026-04-06T19:34:56.811Z",
+      "lastRecalledAt": "2026-04-06T21:21:23.342Z",
+      "queryHashes": [
+        "0b1b22e9ec5c",
+        "7ea73afba679",
+        "ff68e2389597",
+        "317af7350f9c",
+        "163c12ed1881",
+        "d2d886dda037"
+      ],
+      "recallDays": [
+        "2026-04-06"
+      ],
+      "conceptTags": [
+        "in-progress",
+        "pro-14",
+        "pro-11",
+        "pro-7",
+        "pro-9",
+        "pro-13",
+        "2026-04-06t01",
+        "28.451z"
+      ]
+    },
+    "memory:memory/2026-04-06.md:112:147": {
+      "key": "memory:memory/2026-04-06.md:112:147",
+      "path": "memory/2026-04-06.md",
+      "startLine": 112,
+      "endLine": 147,
+      "source": "memory",
+      "snippet": "| PRO-7 Prioritization | Compliance hire protects regulatory wedge | Fair Housing exposure if Laura scales without oversight | Elevate to David this week | --- **Next Heartbeat:** 11:00 PM EDT — Nightly Exception Report generation (first report) **Escalations to David:** None at this heartbeat (will bundle in nightly report at 11:00 PM EDT) --- ## Paperclip Wake Event - Cloud Adapter **Run ID:** c808631f-6ce9-4737-8191-6a8d34d289d5 **Agent ID:** 710adcee-a06a-4a01-b383-4a557525d4a4 (Hermes - CEO) **Company ID:** edea9103-a49f-487f-901f-05b2753b965d **Time:** 2026-04-06 07:44 EDT ### Execution 1. **API Key:** File `~/.openclaw/workspace/paperclip-claimed-api-key.json` does not exist. P",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.6909434768429547,
+      "maxScore": 0.6909434768429547,
+      "firstRecalledAt": "2026-04-06T21:07:21.585Z",
+      "lastRecalledAt": "2026-04-06T21:07:21.585Z",
+      "queryHashes": [
+        "317af7350f9c"
+      ],
+      "recallDays": [
+        "2026-04-06"
+      ],
+      "conceptTags": [
+        "pro-7",
+        "pro",
+        "prioritization",
+        "compliance",
+        "hire",
+        "protects",
+        "regulatory",
+        "wedge"
+      ]
+    },
+    "memory:memory/2026-04-06.md:1:42": {
+      "key": "memory:memory/2026-04-06.md:1:42",
+      "path": "memory/2026-04-06.md",
+      "startLine": 1,
+      "endLine": 42,
+      "source": "memory",
+      "snippet": "# 2026-04-06 ## PRO-15 Phase 0 Complete All child issues completed and parent initiative marked done: ### Deliverables - **PRO-16**: Technical Spec v1.1 at `/docs/control-panel-spec.md` - IAM Flow (JWT, Edge Middleware, roles, CSRF/XSS protections) - API Contract Schemas (Zod validation, Cloud↔Local commands/telemetry) - Deployment Pipeline (Vercel, GitHub Actions CI/CD, rollback procedures) - Audit Logging (file-based, 30-90 day retention, query API, compliance mapping) - PAM/PII Handling (data classification, redaction rules, encryption requirements) - **PRO-17**: Repository Setup Commands at `/docs/control-panel-setup-commands.md` - Next.js 15+ initialization with App Rout",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.7018706753710529,
+      "maxScore": 0.7018706753710529,
+      "firstRecalledAt": "2026-04-06T21:25:53.857Z",
+      "lastRecalledAt": "2026-04-06T21:25:53.857Z",
+      "queryHashes": [
+        "032b9a3ff6ca"
+      ],
+      "recallDays": [
+        "2026-04-06"
+      ],
+      "conceptTags": [
+        "pro-15",
+        "pro-16",
+        "v1.1",
+        "docs/control-panel-spec.md",
+        "csrf/xss",
+        "commands/telemetry",
+        "ci/cd",
+        "file-based"
+      ]
+    },
+    "memory:memory/2026-04-06.md:71:88": {
+      "key": "memory:memory/2026-04-06.md:71:88",
+      "path": "memory/2026-04-06.md",
+      "startLine": 71,
+      "endLine": 88,
+      "source": "memory",
+      "snippet": "- [ ] Manager Approval: [Name + Date + Conditions if any] - [ ] Final Approval: [Hermes + Date] - [ ] Engineering/Execution Ready: Yes/No ``` ### First Compliance Check PRO-17 must submit before completion: - GitHub repo URL - Vercel preview deployment URL - Env vars configured (screenshot with secrets redacted) ### Cascading Enforcement - ProdEng → Frontend/Backend engineers - Ops → Maintenance/tenant communication workflows - Intel → Laura (forensic analysis) outputs **Rationale:** Closes \"draft done, approval forgotten\" gap. Disciplined phase execution with traceable accountability.",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.40852685272693634,
+      "maxScore": 0.40852685272693634,
+      "firstRecalledAt": "2026-04-07T03:00:07.896Z",
+      "lastRecalledAt": "2026-04-07T03:00:07.896Z",
+      "queryHashes": [
+        "f4216fd2c6b4"
+      ],
+      "recallDays": [
+        "2026-04-06"
+      ],
+      "conceptTags": [
+        "engineering/execution",
+        "yes/no",
+        "pro-17",
+        "frontend/backend",
+        "maintenance/tenant",
+        "manager",
+        "approval",
+        "name"
+      ]
+    },
+    "memory:memory/2026-04-06.md:1:36": {
+      "key": "memory:memory/2026-04-06.md:1:36",
+      "path": "memory/2026-04-06.md",
+      "startLine": 1,
+      "endLine": 36,
+      "source": "memory",
+      "snippet": "# 2026-04-06 - Daily Note ## Heartbeat Run: 10:12 PM EDT ### Fleet Status Summary **PRO-13 (Competitive Briefing)**: ✅ In Progress - Pipeline Operational - Weekly briefing system fully operational - Baseline pricing/feature matrices established (Q2 2026 verified) - No critical changes detected this week - Next briefing: April 13, 2026 **PRO-11 (Nightly Exception Report)**: ✅ Done - Protocol configured, awaiting activation **PRO-14 (Bookkeeping Agent)**: 🟡 In Progress - Stripe/Mercury reconciliation setup **PRO-15/16/17/18/19 (Control Panel)**: ✅ All Done - Technical spec, roadmap, components, setup commands complete --- ## Competitive Intelligence Briefing - April 6, 2026 ### Execu",
+      "recallCount": 19,
+      "dailyCount": 0,
+      "totalScore": 13.097895030514463,
+      "maxScore": 0.7535488788868032,
+      "firstRecalledAt": "2026-04-07T07:15:20.904Z",
+      "lastRecalledAt": "2026-04-07T17:19:51.932Z",
+      "queryHashes": [
+        "50864a367319",
+        "da0c2673b826",
+        "f051aa4a792b",
+        "971e69f15158",
+        "a688e58eefa6",
+        "dc681d336179"
+      ],
+      "recallDays": [
+        "2026-04-07"
+      ],
+      "conceptTags": [
+        "pro-13",
+        "pricing/feature",
+        "pro-11",
+        "pro-14",
+        "stripe/mercury",
+        "pro-15/16/17/18/19",
+        "heartbeat",
+        "run"
+      ]
+    },
+    "memory:memory/2026-04-06.md:106:127": {
+      "key": "memory:memory/2026-04-06.md:106:127",
+      "path": "memory/2026-04-06.md",
+      "startLine": 106,
+      "endLine": 127,
+      "source": "memory",
+      "snippet": "- Delivery: Telegram (@estebandq) --- ## Memory Updates **New Files Created**: - `memory/competitive-briefings/2026-04-06-weekly-briefing.md` - Full briefing document - `memory/competitive-tracking/pricing-matrix.md` - Living pricing tracker - `memory/competitive-tracking/feature-matrix.md` - Living feature comparison **Protocols Updated**: - `protocols/COMPETITIVE_INTELLIGENCE_BRIEFING.md` - Monitoring cadence and alert thresholds defined --- ## Notes for Tomorrow - PRO-13 status updated in Paperclip (comment logged) - No immediate CEO action required—baseline monitoring active - April 13 deep-dive on Buildium Lumina AI scheduled as follow-up",
+      "recallCount": 23,
+      "dailyCount": 0,
+      "totalScore": 11.089907214045521,
+      "maxScore": 0.5125072658061981,
+      "firstRecalledAt": "2026-04-07T07:15:20.904Z",
+      "lastRecalledAt": "2026-04-07T17:19:51.932Z",
+      "queryHashes": [
+        "50864a367319",
+        "da0c2673b826",
+        "f051aa4a792b",
+        "971e69f15158",
+        "a688e58eefa6",
+        "dc681d336179",
+        "c5ff39b25511",
+        "9d8cad1e34fe",
+        "15dfe947f34c",
+        "419ecc5b1ec8"
+      ],
+      "recallDays": [
+        "2026-04-07"
+      ],
+      "conceptTags": [
+        "pro-13",
+        "deep-dive",
+        "follow-up",
+        "delivery",
+        "telegram",
+        "estebandq",
+        "updates",
+        "new"
+      ]
+    },
+    "memory:memory/2026-04-07.md:1:56": {
+      "key": "memory:memory/2026-04-07.md:1:56",
+      "path": "memory/2026-04-07.md",
+      "startLine": 1,
+      "endLine": 56,
+      "source": "memory",
+      "snippet": "# 2026-04-07 - Daily Note ## Nightly Exception Report - 11:00 PM EDT ### Executive Summary **Report Period:** April 6-7, 2026 (11:00 PM EDT) **Generated By:** Hermes (CEO Agent) **Delivery:** Telegram (@estebandq) --- ## Exception Summary | Category | Count | Severity | Status | |----------|-------|----------|--------| | Legal/Compliance Signatures Required | 0 | — | None | | Financial Approvals >$500 | 0 | — | None | | Churn Threats | 0 | — | None | | Habitability Law Triggers | 0 | — | None | | Agent Drift Alerts | 0 | — | None | | **Critical Blockers** | **1** | **🔴 High** | **Action Required** | --- ## Critical Blockers ### 1. PRO-6: Phase 0 Customer Onboarding Stall **Status:",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.7253668351669122,
+      "maxScore": 0.7253668351669122,
+      "firstRecalledAt": "2026-04-07T08:15:28.661Z",
+      "lastRecalledAt": "2026-04-07T08:15:28.661Z",
+      "queryHashes": [
+        "4d5896a07ab9"
+      ],
+      "recallDays": [
+        "2026-04-07"
+      ],
+      "conceptTags": [
+        "6-7",
+        "legal/compliance",
+        "pro-6",
+        "nightly",
+        "exception",
+        "report",
+        "edt",
+        "executive"
+      ]
+    },
+    "memory:memory/2026-04-07.md:75:118": {
+      "key": "memory:memory/2026-04-07.md:75:118",
+      "path": "memory/2026-04-07.md",
+      "startLine": 75,
+      "endLine": 118,
+      "source": "memory",
+      "snippet": "- No drift alerts in past 24 hours - All agents operating within green thresholds (<5% deviation) - No tool anomalies detected - No error rate spikes **Heartbeat Status:** - Hermes: ✅ Active (this report) - Intel Agent: ✅ Active (weekly briefing Mondays 9:00 AM EDT) - Bookkeeping Agent: 🟡 Active but not yet executing daily reconciliation - Onboarding Agent: ✅ Deployed (PRO-8 complete) but not assigned to PRO-6 --- ## Escalations to David ### 1. PRO-6 Assignment Decision (Required within 24 hours) **Decision:** Assign Onboarding Agent to PRO-6 and initiate customer checkout **Rationale:** Phase 0 exit criteria cannot be met without customer onboarding. Every day of delay pushes Phase 1",
+      "recallCount": 3,
+      "dailyCount": 0,
+      "totalScore": 1.8458830825341956,
+      "maxScore": 0.7036361283453916,
+      "firstRecalledAt": "2026-04-07T08:15:28.661Z",
+      "lastRecalledAt": "2026-04-07T13:47:59.458Z",
+      "queryHashes": [
+        "4d5896a07ab9",
+        "346459c17966",
+        "c5ff39b25511"
+      ],
+      "recallDays": [
+        "2026-04-07"
+      ],
+      "conceptTags": [
+        "pro-8",
+        "pro-6",
+        "drift",
+        "alerts",
+        "hours",
+        "all",
+        "agents",
+        "operating"
+      ]
+    },
+    "memory:memory/2026-04-07.md:43:83": {
+      "key": "memory:memory/2026-04-07.md:43:83",
+      "path": "memory/2026-04-07.md",
+      "startLine": 43,
+      "endLine": 83,
+      "source": "memory",
+      "snippet": "- Laura agent has no production workload for forensic analysis validation **Recommendation:** - Assign Onboarding Agent (PRO-8 complete, agent deployed) - Initiate checkout within 24 hours - Target: First customer onboarded by April 10, 2026 **Owner:** David (CEO) — requires decision on customer pipeline activation --- ## Fleet Status Overview | Issue | Status | Assignee | Notes | |-------|--------|----------|-------| | PRO-11 | ✅ Done | — | Nightly Exception Report protocol configured | | PRO-13 | 🟡 In Progress | Intel Agent | Weekly competitive briefing operational | | PRO-14 | 🟡 In Progress | Bookkeeping Agent | Stripe/Mercury reconciliation setup | | PRO-15 | ✅ Done | CodeGen Agen",
+      "recallCount": 3,
+      "dailyCount": 0,
+      "totalScore": 1.4649860174514109,
+      "maxScore": 0.6504375429011637,
+      "firstRecalledAt": "2026-04-07T08:15:28.661Z",
+      "lastRecalledAt": "2026-04-07T13:47:59.458Z",
+      "queryHashes": [
+        "4d5896a07ab9",
+        "346459c17966",
+        "c5ff39b25511"
+      ],
+      "recallDays": [
+        "2026-04-07"
+      ],
+      "conceptTags": [
+        "pro-8",
+        "pro-11",
+        "pro-13",
+        "pro-14",
+        "stripe/mercury",
+        "pro-15",
+        "laura",
+        "has"
+      ]
+    },
+    "memory:memory/2026-04-07.md:108:137": {
+      "key": "memory:memory/2026-04-07.md:108:137",
+      "path": "memory/2026-04-07.md",
+      "startLine": 108,
+      "endLine": 137,
+      "source": "memory",
+      "snippet": "**Risks:** - Regulatory risk if Laura processes tenant documents without legal framing validation - Investor due diligence will flag missing compliance function **Next Action:** David to approve job description and initiate search --- ## Tomorrow's Priorities (April 7, 2026) 1. **PRO-6 Assignment** — David decision required 2. **PRO-7 Approval** — Compliance hire requisition 3. **PRO-14 Activation** — Bookkeeping Agent to begin Stripe/Mercury connector setup 4. **PRO-13 Follow-up** — Intel Agent to schedule Buildium Lumina AI deep-dive (due April 13) --- ## Notes - No habitability emergencies requiring immediate SMS escalation - No financial discrepancies >$100 flagged - No tenant dat",
+      "recallCount": 4,
+      "dailyCount": 0,
+      "totalScore": 1.6156344413757324,
+      "maxScore": 0.43248236179351807,
+      "firstRecalledAt": "2026-04-07T08:15:28.677Z",
+      "lastRecalledAt": "2026-04-07T16:16:33.789Z",
+      "queryHashes": [
+        "346459c17966",
+        "0b1b22e9ec5c"
+      ],
+      "recallDays": [
+        "2026-04-07"
+      ],
+      "conceptTags": [
+        "pro-6",
+        "pro-7",
+        "pro-14",
+        "stripe/mercury",
+        "pro-13",
+        "follow-up",
+        "deep-dive",
+        "risks"
+      ]
+    }
+  }
+}

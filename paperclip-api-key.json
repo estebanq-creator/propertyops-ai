@@ -1,0 +1,15 @@
+{
+  "keyId": "b5320b87-cdd0-483a-ae61-c2c3d05ea4be",
+  "token": "pcp_4512ce4fea75da885fe987b762fb0cd004b6a9b77a079a8f",
+  "agentId": "710adcee-a06a-4a01-b383-4a557525d4a4",
+  "companyId": "edea9103-a49f-487f-901f-05b2753b965d",
+  "baseUrl": "http://127.0.0.1:3100",
+  "createdAt": "2026-04-06T22:00:00.000Z",
+  "_routes": {
+    "listIssues":   "GET  /api/companies/{companyId}/issues",
+    "getIssue":     "GET  /api/issues/{issueId}",
+    "updateIssue":  "PATCH /api/issues/{issueId}   — body: {status, priority, assigneeAgentId, comment, ...}",
+    "listAgents":   "GET  /api/companies/{companyId}/agents",
+    "note": "Company-scoped PATCH routes return 404. Always use /api/issues/:id for writes."
+  }
+}
