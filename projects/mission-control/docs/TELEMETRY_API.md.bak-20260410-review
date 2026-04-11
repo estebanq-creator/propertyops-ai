@@ -1,0 +1,327 @@
+# Telemetry & Health API Documentation
+
+## Overview
+
+Mission Control exposes secure API endpoints for OpenClaw agents to report health status via Tailscale tunnel. All endpoints use strict Zod validation and integrate with the alerting system.
+
+## Endpoints
+
+### `POST /api/health/ping`
+
+Quick ping endpoint for latency tracking.
+
+**Request:**
+```json
+{
+  "agentId": "agent-001",
+  "timestamp": "2025-04-10T14:30:00Z",
+  "tunnelLatency": 45.2
+}
+```
+
+**Response:**
+```json
+{
+  "status": "ok",
+  "serverTime": "2025-04-10T14:30:00.123Z",
+  "latency": 52.4,
+  "tunnelLatency": 45.2,
+  "agentId": "agent-001"
+}
+```
+
+**Error Response (400):**
+```json
+{
+  "error": "Invalid request",
+  "details": {
+    "fieldErrors": {
+      "agentId": ["Required"],
+      "timestamp": ["Invalid datetime"]
+    }
+  }
+}
+```
+
+---
+
+### `GET /api/health/ready`
+
+Comprehensive readiness check for load balancers and monitoring.
+
+**Response:**
+```json
+{
+  "status": "ready",
+  "version": "1.0.0",
+  "uptime": 86400000,
+  "agents": {
+    "total": 5,
+    "online": 4,
+    "offline": 1,
+    "degraded": 0
+  },
+  "tunnel": {
+    "connected": true,
+    "activeAgents": 4
+  },
+  "lastTelemetryUpdate": "2025-04-10T14:30:00Z",
+  "responseTime": 12,
+  "issues": ["1 agent(s) offline for > 5 minutes"]
+}
+```
+
+**Status Values:**
+- `ready`: All systems operational
+- `degraded`: Some issues but functional
+- `unavailable`: Critical failure
+
+---
+
+### `POST /api/agents/heartbeat`
+
+Full status report from agents (called every 30 seconds).
+
+**Request:**
+```json
+{
+  "agentId": "agent-001",
+  "agentName": "OpenClaw-Primary",
+  "version": "2.1.0",
+  "status": "online",
+  "uptime": 3600,
+  "startTime": "2025-04-10T13:30:00Z",
+  "lastActivity": "2025-04-10T14:30:00Z",
+  "resources": {
+    "cpu": {
+      "usage": 45.2,
+      "cores": 8
+    },
+    "memory": {
+      "used": 4294967296,
+      "total": 17179869184,
+      "percentage": 25.0
+    },
+    "disk": {
+      "used": 107374182400,
+      "total": 536870912000,
+      "percentage": 20.0
+    },
+    "network": {
+      "bytesSent": 1048576,
+      "bytesReceived": 2097152,
+      "activeConnections": 12
+    }
+  },
+  "tunnel": {
+    "connected": true,
+    "localIp": "192.168.1.100",
+    "tailscaleIp": "100.64.0.1",
+    "latency": 45.2,
+    "lastHandshake": "2025-04-10T14:29:30Z",
+    "relayUsed": false
+  },
+  "activeJobs": 3,
+  "queuedJobs": 5,
+  "failedJobs": 0
+}
+```
+
+**Response:**
+```json
+{
+  "status": "ok",
+  "agentId": "agent-001",
+  "acknowledged": true,
+  "serverTime": "2025-04-10T14:30:00.123Z",
+  "responseTime": 8
+}
+```
+
+---
+
+## Alert Triggers
+
+The system automatically sends alerts for:
+
+### Tunnel Alerts
+| Condition | Severity | Channel | Rate Limit |
+|-----------|----------|---------|------------|
+| Agent offline > 5 min | High | Email, SMS | 5 min |
+| Tunnel disconnected | High | Email, SMS | 5 min |
+| All agents offline | Critical | Email, SMS, Webhook | 1 min |
+
+### Agent Health Alerts
+| Condition | Severity | Channel | Rate Limit |
+|-----------|----------|---------|------------|
+| Memory > 90% | High | Email | 5 min |
+| Memory > 95% | Critical | Email, SMS | 2 min |
+| CPU > 90% | High | Email | 5 min |
+| CPU > 95% | Critical | Email, SMS | 2 min |
+| Job failure rate > 30% | High | Email | 5 min |
+| Job failure rate > 50% | Critical | Email, SMS | 2 min |
+
+### Recovery Alerts
+| Condition | Severity | Channel |
+|-----------|----------|---------|
+| Agent recovers after offline | Medium | Email |
+
+---
+
+## Data Validation
+
+All endpoints use Zod schemas defined in `lib/validations/health.ts`:
+
+- `AgentHeartbeatSchema` - Full heartbeat payload
+- `PingRequestSchema` - Ping request
+- `ResourceMetricsSchema` - CPU, memory, disk, network
+- `TunnelStatusSchema` - Tailscale connection status
+- `AlertPayloadSchema` - Alert notification payload
+
+Validation errors return 400 with detailed field errors.
+
+---
+
+## Telemetry Store
+
+In-memory store (`lib/store/telemetry-store.ts`) tracks:
+
+- Agent heartbeats
+- Response time history (last 100 samples)
+- Consecutive failures
+- First seen / last updated timestamps
+- Tunnel status
+- Resource metrics
+
+**Methods:**
+```typescript
+telemetry.recordHeartbeat(agentId, heartbeat)
+telemetry.recordPing(agentId, responseTimeMs)
+telemetry.getAgent(agentId)
+telemetry.getAllAgents()
+telemetry.getAgentStatus(agentId)
+telemetry.getAgentsByStatus(status)
+telemetry.getOfflineAgents()
+telemetry.getAverageResponseTime(agentId)
+telemetry.getTunnelStatus(agentId)
+telemetry.getResourceMetrics(agentId)
+telemetry.getStats()
+telemetry.checkOfflineAgents(thresholdMs)
+telemetry.getCriticalHealthAgents()
+```
+
+---
+
+## Alerting Service
+
+Alert routing service (`lib/services/alerting.ts`):
+
+**Channels:**
+- Email (Resend) - All severities
+- SMS (Twilio) - High and Critical (stubbed)
+- Webhook - Configurable endpoints
+
+**Usage:**
+```typescript
+import { alerting } from "@/lib/services/alerting"
+
+await alerting.sendAlert({
+  severity: "high",
+  category: "tunnel",
+  title: "Agent offline",
+  message: "Agent X has been offline for 5 minutes",
+  agentId: "agent-001",
+  agentName: "OpenClaw-Primary",
+  timestamp: new Date().toISOString(),
+  requiresAck: true,
+})
+```
+
+**Rate Limiting:**
+- Low: 5 minutes
+- Medium: 2 minutes
+- High: 1 minute
+- Critical: 30 seconds
+
+---
+
+## Security
+
+### Tailscale Tunnel
+All agent communication should route through Tailscale:
+
+1. Agents connect via Tailscale IP (100.64.x.x)
+2. Firewall blocks external access to health endpoints
+3. Mutual TLS optional for additional security
+
+### Rate Limiting
+Implement rate limiting at:
+- API Gateway / Load Balancer level
+- Next.js middleware (optional)
+- Per-agent tracking in telemetry store
+
+### Input Validation
+- All payloads validated with Zod
+- Strict type checking
+- Field-level error messages
+- Max string lengths enforced
+- Numeric ranges validated
+
+---
+
+## Monitoring
+
+### Health Check Intervals
+- Load balancer: `GET /api/health/ready` every 10s
+- Agent ping: `POST /api/health/ping` every 30s
+- Agent heartbeat: `POST /api/agents/heartbeat` every 30s
+
+### Metrics to Track
+- Average response time
+- P95/P99 latency
+- Tunnel latency distribution
+- Agent uptime percentage
+- Alert frequency by severity
+- Rate limit hits
+
+---
+
+## Environment Variables
+
+See `.env.example` for configuration:
+
+```bash
+# Required for email alerts
+RESEND_API_KEY=re_xxx
+ALERT_EMAIL_FROM=alerts@...
+ALERT_EMAIL_TO=admin@...
+
+# Optional for SMS alerts
+TWILIO_ACCOUNT_SID=ACxxx
+TWILIO_AUTH_TOKEN=xxx
+TWILIO_PHONE_NUMBER=+1xxx
+ALERT_SMS_TO=+1xxx
+
+# Optional for webhook alerts
+ALERT_WEBHOOK_URL=https://hooks...
+```
+
+---
+
+## Error Handling
+
+All endpoints return consistent error format:
+
+```json
+{
+  "error": "Error type",
+  "message": "Human-readable description",
+  "details": {} // Optional validation details
+}
+```
+
+HTTP Status Codes:
+- 200: Success
+- 400: Validation error
+- 500: Internal server error
+- 503: Service unavailable (from /api/health/ready)

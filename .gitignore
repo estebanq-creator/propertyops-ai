@@ -16,9 +16,11 @@
 # next.js
 /.next/
 /out/
+**/.next/
 
 # production
 /build
+**/node_modules/
 
 # misc
 .DS_Store
@@ -39,3 +41,22 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# secrets and local credentials
+*.key
+*.token
+paperclip-api-key.json
+
+# runtime artifacts
+memory/
+.openclaw/
+*.db
+*.sqlite
+
+# nested git repos / subprojects
+projects/propertyops-ai/
+
+# macOS
+*.alias
+~$*
+projects/business-planning/Configuration/TechSpecs

@@ -1,0 +1,267 @@
+# ARCHITECTURE.md
+
+**Purpose:** Deep architecture documentation — components, boundaries, data flow, control flow, routing, integration design.
+**Scope:** OpenClaw, Hermes, Paperclip, Codex as observed April 8, 2026.
+**Key Files Referenced:** `~/.openclaw/openclaw.json`, `~/.openclaw/cron/jobs.json`, `~/.openclaw/node.json`, `~/.hermes/config.yaml`, `~/.openclaw/workspace-hermes/AGENTS.md`, `~/.openclaw/vault-main/AGENTS.md`
+
+---
+
+## Architectural Layers
+
+```
+┌──────────────────────────────────────────────────────┐
+│                 HUMAN INTERFACE LAYER                │
+│   Telegram (3 bots) · Discord · Webchat              │
+└──────────────────────┬───────────────────────────────┘
+                       │
+┌──────────────────────▼───────────────────────────────┐
+│                  CONTROL PLANE                       │
+│             OpenClaw Runtime                         │
+│  ┌─────────────────────────────────────────────┐    │
+│  │  Gateway (ws://127.0.0.1:18789)             │    │
+│  │  Router (channel + account bindings)        │    │
+│  │  Cron Scheduler (jobs.json)                 │    │
+│  │  Hook System (boot-md, command-logger,      │    │
+│  │               session-memory)               │    │
+│  │  Session Manager                            │    │
+│  │  Delivery Queue                             │    │
+│  │  Plugin Host (opik-openclaw, acpx)          │    │
+│  └─────────────────────────────────────────────┘    │
+└──────────────────────┬───────────────────────────────┘
+                       │
+┌──────────────────────▼───────────────────────────────┐
+│                  AGENT LAYER                         │
+│                                                      │
+│  workspace-main              workspace-hermes        │
+│  ┌──────────────┐           ┌──────────────────┐    │
+│  │ Cal          │           │ hermes (CEO)      │    │
+│  │ (operator)   │           │ laura (forensic)  │    │
+│  └──────────────┘           │ tony (ops)        │    │
+│                             │ prodeng, qa       │    │
+│  workspace-vicky            │ revenue, ops      │    │
+│  ┌──────────────┐           │ intel, codegen    │    │
+│  │ Vicky        │           │ outbound-sales    │    │
+│  │ (personal    │           └──────────────────┘    │
+│  │  support)    │                                    │
+│  └──────────────┘                                    │
+└──────────────────────┬───────────────────────────────┘
+                       │
+┌──────────────────────▼───────────────────────────────┐
+│                EXECUTION LAYER                       │
+│  Model Providers                                     │
+│  ┌──────────────┬──────────────┬──────────────┐     │
+│  │ Ollama.com   │ OpenRouter   │ Groq         │     │
+│  │ (primary)    │ (fallback)   │ (audio/STT)  │     │
+│  └──────────────┴──────────────┴──────────────┘     │
+│                                                      │
+│  Codex (heavy coding execution)                      │
+│  Terminal (local, Docker-capable)                    │
+└──────────────────────┬───────────────────────────────┘
+                       │
+┌──────────────────────▼───────────────────────────────┐
+│                  MEMORY LAYER                        │
+│  vault-main/ (canonical durable memory)              │
+│  workspace-*/memory/ (runtime + daily notes)         │
+│  SQLite vector store (nomic-embed-text via Ollama)   │
+│  state.db (Hermes), logs_1.sqlite (Codex)            │
+└──────────────────────┬───────────────────────────────┘
+                       │
+┌──────────────────────▼───────────────────────────────┐
+│             EXTERNAL INTEGRATIONS                    │
+│  Paperclip API (http://127.0.0.1:3100/api)           │
+│  NYC 311 portal (web fetch cron)                     │
+│  Strava (health data)                                │
+│  Vercel (control-panel deployment)                   │
+│  Tailscale (secure tunnel to gateway)                │
+└──────────────────────────────────────────────────────┘
+```
+
+---
+
+## OpenClaw — Control Plane Detail
+
+### Gateway
+- Protocol: WebSocket (`ws://`) + HTTP
+- Bind: loopback only (`127.0.0.1:18789`)
+- Auth: token from file (`~/.openclaw/credentials/gateway-token.txt`)
+- Control UI allowed origins: `http://localhost:18789`, `http://127.0.0.1:18789`
+- Node identity: `new-node-123` ("Esteban's MacBook Pro")
+
+The gateway is the sole ingress point for external tool connections (Codex, browser, dashboard) and serves the webchat UI.
+
+### Router / Bindings
+Agent routing is defined in `openclaw.json` under `bindings`. The full routing table:
+
+| Channel        | Account/Condition        | Agent    |
+|---------------|--------------------------|----------|
+| telegram       | account: default (hermes-bot) | hermes |
+| telegram       | account: vicky           | vicky    |
+| telegram       | account: cal             | Cal      |
+| discord        | (any)                    | Cal      |
+| webchat        | (any)                    | Cal      |
+
+Telegram has three separate bots, each mapped to a different agent. This means a user must message the correct bot to reach the intended agent.
+
+### ACP (Agent Control Panel)
+- Enabled: `true`
+- Default agent: `hermes`
+- Allowed agents: `hermes`, `Cal`, `codex`, `laura`, `tony`, `codegen`, `qa`, `outbound-sales`
+
+The ACP is an internal control surface for directing agent execution. The `acpx` plugin appears to extend it.
+
+### Agent-to-Agent Messaging
+Enabled for: `hermes`, `Cal`, `vicky`, `prodeng`, `tony`, `laura`, `ops`, `revenue`, `intel`, `qa`, `codegen`, `outbound-sales`.
+
+Note: Hermes workspace `MEMORY.md` contains a single-line note: *"Agent-to-agent messaging is disabled. Re-assign and re-prioritize agent tasks manually via Paperclip board."* — This conflicts with the `agentToAgent.enabled: true` config. Current operational state is ambiguous.
+
+### Cron System
+- Config: `~/.openclaw/cron/jobs.json` (1955-line JSON, version 1)
+- Max concurrent runs: 1
+- Each job defines: `id`, `name`, `enabled`, `schedule` (cron expression + timezone), `agentId`, `payload` (agentTurn with message and model), `delivery` (channel, target), `sessionTarget` (isolated), `wakeMode`
+- Cron sessions are isolated by default
+
+Key active jobs:
+- `behavioral-governance-maintenance` — Weekly (Sundays 18:00 ET), Cal, governance review, Telegram delivery
+- `Monitor NYC 311 (Weekends)` — Weekends 09:00 ET, Vicky, web fetch of NYC 311 portal, alert Grace on Telegram if parking/school status changes
+- Multiple other jobs (total 79KB of job definitions)
+
+### Hook System
+Internal hooks (configured in `openclaw.json`):
+- `boot-md` — runs at boot
+- `command-logger` — logs all commands
+- `session-memory` — handles session memory on close/open
+
+### Plugin System
+Active plugins: `opik-openclaw` (v0.2.9, from local path), `acpx`, `ollama`, `openrouter`.
+Allowed plugin list includes 30+ providers (Anthropic, OpenAI, Google, Mistral, etc.) — most are enabled but not necessarily active.
+
+---
+
+## Agent Layer Detail
+
+### Agent Default Configuration
+All agents inherit from `agents.defaults`:
+- Primary model: `ollama/glm-5:cloud`
+- Fallback: `openrouter/google/gemini-2.5-flash-lite`
+- Default workspace: `/Users/david/.openclaw/workspace-main`
+- Bootstrap max chars: 250,000 (total: 300,000)
+- Context tokens: 48,000
+- Memory search: `nomic-embed-text` via local Ollama at `127.0.0.1:11434`, SQLite vector store
+- Compaction: safeguard mode, reserve 18k tokens, keep 6k recent, max 60% history share
+- Max concurrent agents: 4 (subagents: 8)
+- Session timeout: 300s
+
+### Per-Agent Overrides
+
+| Agent | Model (Primary) | Workspace | Heartbeat | Notes |
+|-------|----------------|-----------|-----------|-------|
+| hermes | qwen3.5:397b-cloud | workspace-hermes | none | CEO persona |
+| Cal | qwen3.5:cloud | workspace-main | 30m | tools: coding profile |
+| vicky | gpt-oss:20b-cloud | workspace-vicky | 15m | web_search denied |
+| laura | qwen3-vl:32b-cloud | workspace-hermes | — | Vision model (document analysis) |
+| tony | gpt-oss:20b-cloud | workspace-hermes | — | Operations agent |
+| codegen | devstral-2:123b-cloud | workspace-hermes | — | Code generation |
+| prodeng, qa, revenue, ops, intel, outbound-sales | qwen3.5:397b-cloud | workspace-hermes | — | Business function agents |
+
+### Workspace Structure
+Each workspace contains identity and behavioral files loaded at session start:
+- `SOUL.md` — agent personality and purpose
+- `IDENTITY.md` — role, responsibilities, what the agent does and does not do
+- `AGENTS.md` — operating model: startup procedure, trust model, execution defaults, tool rules
+- `HEARTBEAT.md` — behavior during periodic heartbeat runs
+- `MEMORY.md` — digest/router pointing to canonical memory files
+- `memory/YYYY-MM-DD.md` — daily working notes
+- `agents/<role>/` — per-sub-role behavioral docs (BEHAVIOR.md, GUARDRAILS.md, DECISION_FRAMEWORK.md, etc.)
+
+---
+
+## Hermes — Business Agent Architecture
+
+Hermes operates as CEO of PropertyOps AI. Its workspace contains a full organizational chart as agents:
+
+### Hermes Org Chart (workspace-hermes/agents/)
+- `ceo/` — Hermes itself (executive behavior, decision framework, guardrails)
+- `cto/` — Technical leadership role
+- `laura/` — Intelligence layer: forensic document integrity analysis for tenant onboarding
+- `tony/` — Operational layer: maintenance triage, tenant communication drafting
+- `prodeng/` — Product engineering
+- `qa/` — Quality assurance
+- `revenue/` — Revenue function
+- `ops/` — Operations
+- `intel/` — Market intelligence
+- `outbound-sales/` — Sales outreach
+- `codegen/` — Code generation
+- `atlas/`, `bookkeeping/`, `market-research/`, `onboarding/` — Additional business functions
+
+### Laura Constraints (Production-Critical)
+Laura is strictly forensic-only:
+- May flag anomalies in tenant documents
+- May NOT produce scoring or screening recommendations
+- May NOT use language that triggers Fair Housing classification
+This constraint is enforced at the IDENTITY, SOUL, and BEHAVIOR level. Violating it is a legal risk.
+
+### Tony Constraints (Production-Critical)
+Tony requires human approval through Phase 2:
+- May draft communications and work orders
+- May NOT auto-execute actions before Phase 3 thresholds are met
+- All actions require human approval via the control panel
+
+### Phase Execution Model
+PropertyOps AI runs in phases (0 → 1 → 2 → 3). Phase jumps require evidence/exit criteria. As of April 2026:
+- Phase 0: Complete (PRO-15 through PRO-19 done)
+- Phase 1: MVP Dashboard deployment (Next.js control panel in `workspace-hermes/control-panel/`)
+- Phase 2: Expanding capabilities with continued human-in-the-loop
+
+### Paperclip Integration
+Hermes reads from Paperclip at `http://127.0.0.1:3100/api`:
+```
+curl -s -H "Authorization: Bearer <token>" http://127.0.0.1:3100/api/companies/<company>/issues?assigneeAgentId=hermes&status=todo
+```
+API key lives in `~/.openclaw/workspace-hermes/paperclip-api-key.json`. The company ID is `edea9103-a49f-487f-901f-05b2753b965d`.
+
+---
+
+## Data Flow — Inbound Message
+
+```
+Telegram message → OpenClaw gateway (WS:18789)
+    → Router applies bindings → selects agent
+    → Agent session starts (or resumes)
+    → Workspace files bootstrapped (SOUL, IDENTITY, AGENTS, MEMORY, daily notes)
+    → Agent processes message
+    → Tool calls (web, file, shell, agent-to-agent, Paperclip)
+    → Response generated
+    → Delivery queue → Telegram reply (or announce mode for cron)
+```
+
+## Data Flow — Cron Job
+
+```
+Cron scheduler reads jobs.json
+    → At scheduled time, creates isolated agent session
+    → Sends payload message to agent
+    → Agent executes (with lightContext = minimal bootstrap)
+    → Output routed per delivery config (announce/none/telegram)
+    → Session closed, state.lastRunAtMs updated in jobs.json
+```
+
+---
+
+## Control Panel (PropertyOps AI Dashboard)
+
+Located at: `~/.openclaw/workspace-hermes/control-panel/`
+Tech: Next.js 15+ (App Router), TypeScript, Tailwind + shadcn/ui, next-auth v5, Zod
+Deployment: Vercel (Edge + Serverless)
+Tunnel: Tailscale for secure access to local OpenClaw gateway
+
+The control panel is the owner-facing UI for PropertyOps AI. It surfaces agent actions for human approval (Tony's work orders, Laura's document flags). It is Phase 1's main deliverable.
+
+---
+
+## Open Questions / Ambiguities
+
+- Whether `~/.hermes/` (standalone Hermes app with `config.yaml`) and OpenClaw's `hermes` agent are the same process or two separate instances is not clear from config alone.
+- The `opik-openclaw` plugin's role is not documented — it provides SQLite vector store support but may have additional functions.
+- `acpx` plugin purpose is not documented beyond being enabled.
+- The `vault-main/` directory serves as both knowledge repository and Cal's persistent memory — the boundary between "Cal's workspace" and "Cal's vault" is convention-driven, not enforced by system config.
+- Whether the `openai-codex:default` OAuth profile (in `openclaw.json`) is active and connected is not confirmed.

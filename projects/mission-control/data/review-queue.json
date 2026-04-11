@@ -1,0 +1,180 @@
+{
+  "reports": [
+    {
+      "id": "report-001",
+      "landlordId": "landlord-001",
+      "propertyId": "prop-001",
+      "tenantName": "John Doe",
+      "documentType": "paystub",
+      "status": "rejected",
+      "anomalies": [
+        {
+          "type": "metadata_inconsistency",
+          "severity": "medium",
+          "evidence": "PDF creation date differs from stated document date.",
+          "location": "Document metadata"
+        },
+        {
+          "type": "font_variation",
+          "severity": "low",
+          "evidence": "Two font families appear in the salary field.",
+          "location": "Page 1, salary section"
+        }
+      ],
+      "createdAt": "2026-04-05T14:30:00Z",
+      "reviewedAt": "2026-04-10T22:17:59.003Z",
+      "reviewedBy": "owner-001",
+      "rejectionReason": "Needs closer review"
+    },
+    {
+      "id": "report-002",
+      "landlordId": "landlord-001",
+      "propertyId": "prop-002",
+      "tenantName": "Jane Smith",
+      "documentType": "id",
+      "status": "rejected",
+      "anomalies": [
+        {
+          "type": "image_manipulation_detected",
+          "severity": "high",
+          "evidence": "Compression patterns vary inside the photo region.",
+          "location": "Photo area"
+        }
+      ],
+      "createdAt": "2026-04-05T15:00:00Z",
+      "reviewedAt": "2026-04-10T22:17:46.561Z",
+      "reviewedBy": "owner-001",
+      "rejectionReason": "Needs closer review"
+    },
+    {
+      "id": "report-003",
+      "landlordId": "landlord-002",
+      "propertyId": "prop-003",
+      "tenantName": "Robert Wilson",
+      "documentType": "bank_statement",
+      "status": "approved",
+      "anomalies": [],
+      "createdAt": "2026-04-06T09:00:00Z",
+      "reviewedAt": "2026-04-10T22:17:32.199Z",
+      "reviewedBy": "owner-001"
+    },
+    {
+      "id": "report-004",
+      "landlordId": "landlord-003",
+      "propertyId": "prop-004",
+      "tenantName": "Maria Garcia",
+      "documentType": "employment_letter",
+      "status": "approved",
+      "anomalies": [
+        {
+          "type": "template_mismatch",
+          "severity": "medium",
+          "evidence": "Letterhead differs from known employer template.",
+          "location": "Header section"
+        }
+      ],
+      "createdAt": "2026-04-06T11:30:00Z",
+      "reviewedAt": "2026-04-10T22:17:39.036Z",
+      "reviewedBy": "owner-001"
+    },
+    {
+      "id": "report-005",
+      "landlordId": "landlord-004",
+      "propertyId": "prop-007",
+      "tenantName": "James Lee",
+      "documentType": "lease",
+      "status": "approved",
+      "anomalies": [
+        {
+          "type": "signature_anomaly",
+          "severity": "high",
+          "evidence": "Digital signature certificate expired at signing time.",
+          "location": "Signature block, page 3"
+        },
+        {
+          "type": "text_alteration",
+          "severity": "high",
+          "evidence": "Rent amount field shows signs of digital alteration.",
+          "location": "Section 4.2, page 2"
+        }
+      ],
+      "createdAt": "2026-04-06T16:00:00Z",
+      "reviewedAt": "2026-04-10T22:17:29.399Z",
+      "reviewedBy": "owner-001"
+    }
+  ],
+  "auditLog": [
+    {
+      "id": "audit-1775859449399",
+      "timestamp": "2026-04-10T22:17:29.399Z",
+      "action": "report_approved",
+      "actor": "owner-001",
+      "reportId": "report-005",
+      "details": {
+        "previousStatus": "pending_review",
+        "newStatus": "approved",
+        "landlordId": "landlord-004",
+        "propertyId": "prop-007",
+        "anomalyCount": 2
+      }
+    },
+    {
+      "id": "audit-1775859452199",
+      "timestamp": "2026-04-10T22:17:32.199Z",
+      "action": "report_approved",
+      "actor": "owner-001",
+      "reportId": "report-003",
+      "details": {
+        "previousStatus": "pending_review",
+        "newStatus": "approved",
+        "landlordId": "landlord-002",
+        "propertyId": "prop-003",
+        "anomalyCount": 0
+      }
+    },
+    {
+      "id": "audit-1775859459036",
+      "timestamp": "2026-04-10T22:17:39.036Z",
+      "action": "report_approved",
+      "actor": "owner-001",
+      "reportId": "report-004",
+      "details": {
+        "previousStatus": "pending_review",
+        "newStatus": "approved",
+        "landlordId": "landlord-003",
+        "propertyId": "prop-004",
+        "anomalyCount": 1
+      }
+    },
+    {
+      "id": "audit-1775859466561",
+      "timestamp": "2026-04-10T22:17:46.561Z",
+      "action": "report_rejected",
+      "actor": "owner-001",
+      "reportId": "report-002",
+      "details": {
+        "previousStatus": "pending_review",
+        "newStatus": "rejected",
+        "landlordId": "landlord-001",
+        "propertyId": "prop-002",
+        "anomalyCount": 1,
+        "reason": "Needs closer review"
+      }
+    },
+    {
+      "id": "audit-1775859479004",
+      "timestamp": "2026-04-10T22:17:59.004Z",
+      "action": "report_rejected",
+      "actor": "owner-001",
+      "reportId": "report-001",
+      "details": {
+        "previousStatus": "pending_review",
+        "newStatus": "rejected",
+        "landlordId": "landlord-001",
+        "propertyId": "prop-001",
+        "anomalyCount": 2,
+        "reason": "Needs closer review"
+      }
+    }
+  ]
+}
