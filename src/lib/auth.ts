@@ -52,6 +52,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
+        domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
         maxAge: parseInt(process.env.AUTH_SESSION_MAX_AGE || '86400', 10),
       },
     },
