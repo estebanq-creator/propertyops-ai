@@ -50,7 +50,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       options: {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: 'lax',
         path: '/',
         maxAge: parseInt(process.env.AUTH_SESSION_MAX_AGE || '86400', 10),
       },
