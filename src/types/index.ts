@@ -15,7 +15,7 @@ export interface Task {
   status: 'pending' | 'approved' | 'rejected' | 'completed' | 'failed';
   sourceStatus?: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
-  assigneeAgentId?: string;
+  assigneeAgentId?: string | null;
   assigneeUserId?: string;
   createdAt: string;
   updatedAt: string;

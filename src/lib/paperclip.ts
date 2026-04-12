@@ -260,6 +260,7 @@ export function mapIssueToTask(issue: PaperclipIssue): {
   id: string;
   title: string;
   status: 'pending' | 'approved' | 'rejected' | 'completed' | 'failed';
+  sourceStatus?: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
   assigneeAgentId?: string;
   createdAt: string;
@@ -327,25 +328,10 @@ export function mapIssueToTask(issue: PaperclipIssue): {
 export interface PaperclipIssueUpdate {
   status?: string;
   priority?: string;
-  assigneeAgentId?: string | null;
+  assigneeAgentId?: string;
   title?: string;
   description?: string;
   comment?: string;
-}
-
-/**
- * Update an issue by ID.
- *
- * Uses the direct /api/issues/:id path — company-scoped PATCH routes return 404.
- */
-export async function updateIssue(
-  issueId: string,
-  update: PaperclipIssueUpdate
-): Promise<PaperclipIssue> {
-  return paperclipRequest<PaperclipIssue>(`/issues/${issueId}`, {
-    method: 'PATCH',
-    body: JSON.stringify(update),
-  });
 }
 
 /**
