@@ -46,13 +46,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   cookies: {
     sessionToken: {
-      name: `authjs.session-token`,
+      name: `__Host-authjs.session-token`,
       options: {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
-        domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
         maxAge: parseInt(process.env.AUTH_SESSION_MAX_AGE || '86400', 10),
       },
     },
