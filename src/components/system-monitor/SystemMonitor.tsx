@@ -11,7 +11,7 @@ export function SystemMonitor() {
   useEffect(() => {
     const fetchHealth = async () => {
       try {
-        const response = await fetch('/api/health');
+        const response = await fetch('/api/health', { credentials: 'include' });
         if (!response.ok) throw new Error('Failed to fetch system health');
         const data = await response.json();
         setHealth(data);

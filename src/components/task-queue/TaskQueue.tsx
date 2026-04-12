@@ -12,7 +12,7 @@ export function TaskQueue() {
 
   const fetchTasks = useCallback(async () => {
     try {
-      const response = await fetch('/api/tasks', { cache: 'no-store' });
+      const response = await fetch('/api/tasks', { cache: 'no-store', credentials: 'include' });
       const data = await response.json().catch(() => null);
       if (!response.ok) {
         throw new Error(data?.error || 'Failed to fetch tasks');
@@ -46,6 +46,7 @@ export function TaskQueue() {
       setError(null);
       const response = await fetch(`/api/tasks/${taskId}/approve`, {
         method: 'POST',
+        credentials: 'include',
       });
       const data = await response.json().catch(() => null);
       if (!response.ok) {
@@ -72,6 +73,7 @@ export function TaskQueue() {
       setError(null);
       const response = await fetch(`/api/tasks/${taskId}/reject`, {
         method: 'POST',
+        credentials: 'include',
       });
       const data = await response.json().catch(() => null);
       if (!response.ok) {
