@@ -323,18 +323,6 @@ export function mapIssueToTask(issue: PaperclipIssue): {
 }
 
 /**
- * Fields that can be updated on an issue via PATCH /api/issues/{issueId}
- */
-export interface PaperclipIssueUpdate {
-  status?: string;
-  priority?: string;
-  assigneeAgentId?: string;
-  title?: string;
-  description?: string;
-  comment?: string;
-}
-
-/**
  * Convenience: move an issue to a new status.
  *
  * @param issueId  The issue UUID (not the human identifier like "PRO-14").
