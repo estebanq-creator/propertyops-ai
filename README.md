@@ -4,9 +4,13 @@ AI-native operations dashboard for independent landlords and small property mana
 
 ## Status
 
-**Phase:** Phase 0 → Phase 1 (MVP Dashboard)  
-**PROs:** PRO-15, PRO-16, PRO-17, PRO-18, PRO-19 ✅ Complete  
-**Next:** Phase 1 MVP Deployment
+**GTM Phase:** Phase 1 — Laura Pilot (Pilot-Ready)  
+**Engineering Phase:** Phase 1 Complete — MVP Dashboard Deployed  
+**PROs:** PRO-15 through PRO-19, PRO-21 through PRO-27 ✅ Complete  
+**Next:** Laura Pilot Onboarding (5 landlords)
+
+**Product Release Sequence:** Laura Pilot → Tony Closed Beta → Billing Automation → Controlled Autonomy  
+**See:** `../docs/LAUNCH-DECISION.md` for canonical GTM sequence and launch rationale
 
 ## Tech Stack
 

@@ -2,8 +2,12 @@
 
 **Initiative:** PRO-27: Tony Portal - Draft-Only Tenant Maintenance Interface (Phase 2D)  
 **Goal:** Phase 2D: Tony Portal - Tenant Maintenance Interface (Draft-Only)  
-**Status:** ✅ IMPLEMENTATION COMPLETE  
-**Date:** 2026-04-07
+**Status:** ✅ IMPLEMENTATION COMPLETE — 🟡 CLOSED BETA (Draft-Only)  
+**Date:** 2026-04-07  
+**GTM Status:** Not general availability — beta opens after Laura pilot validation (50/50 reports)
+
+**Launch Decision:** `../docs/LAUNCH-DECISION.md`  
+**Messaging:** `../docs/LAUNCH-MESSAGING.md` (Tony Beta Next section)
 
 ---
 

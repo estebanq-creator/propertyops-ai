@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { paperclipRequest } from '@/lib/paperclip';
+import { getIssue, paperclipRequest, setIssueStatus } from '@/lib/paperclip';
 
 const COMPANY_ID = process.env.PAPERCLIP_COMPANY_ID || 'edea9103-a49f-487f-901f-05b2753b965d';
 
@@ -13,17 +13,27 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
+    const issue = await getIssue(id);
+    const issueStatus = issue.status.toLowerCase();
+
+    if (issueStatus === 'in_progress') {
+      return NextResponse.json({
+        success: true,
+        taskId: id,
+        status: 'approved',
+        approvedAt: issue.startedAt || new Date().toISOString(),
+      });
+    }
+
+    if ((issueStatus === 'backlog' || issueStatus === 'todo') && !issue.assigneeAgentId && !issue.assigneeUserId) {
+      return NextResponse.json(
+        { error: 'Task must be assigned before approval' },
+        { status: 409 }
+      );
+    }
     
-    // Update the issue status to 'in_progress' to indicate approval
-    await paperclipRequest(
-      `/companies/${COMPANY_ID}/issues/${id}`,
-      {
-        method: 'PATCH',
-        body: JSON.stringify({
-          status: 'in_progress',
-        }),
-      }
-    );
+    // Move the issue into active work using the canonical direct issue route.
+    await setIssueStatus(id, 'in_progress', 'Approved from Mission Control task queue');
     
     // Create an audit log entry
     await paperclipRequest(

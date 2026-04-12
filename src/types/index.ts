@@ -13,6 +13,7 @@ export interface Task {
   id: string;
   title: string;
   status: 'pending' | 'approved' | 'rejected' | 'completed' | 'failed';
+  sourceStatus?: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
   assigneeAgentId?: string;
   assigneeUserId?: string;
@@ -26,6 +27,31 @@ export interface Task {
   description?: string;
   identifier?: string; // e.g., "PRO-13"
   labels?: string[];
+}
+
+export type TenantMessageStatus = 'draft' | 'submitted' | 'approved' | 'rejected';
+
+export interface TenantMessage {
+  id: string;
+  identifier?: string;
+  issueNumber?: number;
+  tenantId: string;
+  tenantName?: string;
+  propertyId?: string;
+  propertyLabel?: string;
+  unitId?: string;
+  unitLabel?: string;
+  subject: string;
+  body: string;
+  status: TenantMessageStatus;
+  isHabitability: boolean;
+  habitabilityMatches: string[];
+  createdAt: string;
+  updatedAt: string;
+  submittedAt?: string;
+  approvedAt?: string;
+  approvedBy?: string;
+  rejectionReason?: string;
 }
 
 export interface CronJob {

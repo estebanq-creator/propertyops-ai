@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { paperclipRequest } from '@/lib/paperclip';
+import { paperclipRequest, setIssueStatus } from '@/lib/paperclip';
 
 const COMPANY_ID = process.env.PAPERCLIP_COMPANY_ID || 'edea9103-a49f-487f-901f-05b2753b965d';
 
@@ -14,16 +14,8 @@ export async function POST(
   try {
     const { id } = await params;
     
-    // Update the issue status to 'cancelled' to indicate rejection
-    await paperclipRequest(
-      `/companies/${COMPANY_ID}/issues/${id}`,
-      {
-        method: 'PATCH',
-        body: JSON.stringify({
-          status: 'cancelled',
-        }),
-      }
-    );
+    // Cancel the issue using the canonical direct issue route.
+    await setIssueStatus(id, 'cancelled', 'Rejected from Mission Control task queue');
     
     // Create an audit log entry
     await paperclipRequest(

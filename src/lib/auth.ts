@@ -42,6 +42,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: 'jwt',
     maxAge: parseInt(process.env.AUTH_SESSION_MAX_AGE || '86400', 10), // 24 hours
+    updateAge: 900, // 15 minutes - triggers silent refresh on activity
+  },
+  cookies: {
+    sessionToken: {
+      name: `authjs.session-token`,
+      options: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        path: '/',
+        maxAge: parseInt(process.env.AUTH_SESSION_MAX_AGE || '86400', 10),
+      },
+    },
   },
   callbacks: {
     async jwt({ token, user }: { token: any; user?: any }) {
@@ -73,5 +86,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     error: '/auth/error',
   },
   secret: process.env.AUTH_SECRET,
-  trustHost: process.env.AUTH_TRUST_HOST === 'true',
+  trustHost: process.env.AUTH_TRUST_HOST === 'true' || process.env.VERCEL === '1',
 });

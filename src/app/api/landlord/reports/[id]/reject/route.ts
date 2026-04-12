@@ -12,39 +12,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-
-// In-memory store (same as approve route)
-const reportsStore = new Map([
-  [
-    'report-001',
-    {
-      id: 'report-001',
-      landlordId: 'landlord-001',
-      propertyId: 'prop-001',
-      tenantName: 'John Doe',
-      documentType: 'paystub',
-      status: 'pending_review' as 'pending_review' | 'approved' | 'rejected',
-      anomalies: [
-        {
-          type: 'metadata_inconsistency',
-          severity: 'medium' as 'low' | 'medium' | 'high',
-          evidence: 'PDF creation date (2026-03-15) differs from document date (2026-02-01)',
-          location: 'Document metadata',
-        },
-      ],
-      createdAt: '2026-04-05T14:30:00Z',
-    },
-  ],
-]);
-
-const auditLog: Array<{
-  id: string;
-  timestamp: string;
-  action: string;
-  actor: string;
-  reportId: string;
-  details: Record<string, unknown>;
-}> = [];
+import { getReviewGateMeta, rejectReport } from '@/lib/landlord-review-store';
 
 export async function POST(
   request: NextRequest,
@@ -58,8 +26,9 @@ export async function POST(
     const { reason } = body;
 
     // Verify report exists
-    const report = reportsStore.get(id);
-    if (!report) {
+    const reviewerId = 'owner-001'; // David (Mission Control)
+    const result = rejectReport(id, reviewerId, reason);
+    if (!result) {
       return NextResponse.json(
         {
           success: false,
@@ -69,42 +38,8 @@ export async function POST(
       );
     }
 
-    // COMPLIANCE: Verify reviewer is owner (Mission Control)
-    const reviewerId = 'owner-001'; // David (Mission Control)
-
-    // Update report status
-    const updatedReport = {
-      ...report,
-      status: 'rejected' as const,
-      reviewedAt: new Date().toISOString(),
-      reviewedBy: reviewerId,
-      rejectionReason: reason || 'Not specified',
-    };
-
-    reportsStore.set(id, updatedReport);
-
-    // Create audit trail entry
-    auditLog.push({
-      id: `audit-${Date.now()}`,
-      timestamp: new Date().toISOString(),
-      action: 'report_rejected',
-      actor: reviewerId,
-      reportId: id,
-      details: {
-        previousStatus: report.status,
-        newStatus: 'rejected',
-        landlordId: report.landlordId,
-        propertyId: report.propertyId,
-        anomalyCount: report.anomalies.length,
-        reason: reason || 'Not specified',
-      },
-    });
-
-    // Calculate review gate progress
-    const allReports = Array.from(reportsStore.values());
-    const validatedCount = allReports.filter(
-      r => r.status === 'approved' || r.status === 'rejected'
-    ).length;
+    const { report: updatedReport, auditEntry } = result;
+    const reviewGate = getReviewGateMeta();
 
     return NextResponse.json({
       success: true,
@@ -115,15 +50,10 @@ export async function POST(
         reviewedBy: updatedReport.reviewedBy,
       },
       meta: {
-        reviewGate: {
-          totalRequired: 50,
-          validated: validatedCount,
-          remaining: Math.max(0, 50 - validatedCount),
-          bypassEnabled: validatedCount >= 50,
-        },
+        reviewGate,
         auditTrail: {
           logged: true,
-          auditId: auditLog[auditLog.length - 1].id,
+          auditId: auditEntry.id,
         },
       },
     });

@@ -216,7 +216,7 @@ The following scaffolding is in place for Phase 2 interactive controls:
 ```env
 # Paperclip API (Local Gateway)
 PAPERCLIP_API_URL=http://127.0.0.1:3100/api
-PAPERCLIP_API_KEY=pcp_4512ce4fea75da885fe987b762fb0cd004b6a9b77a079a8f
+PAPERCLIP_API_KEY=<load-from-authoritative-paperclip-api-key.json>
 PAPERCLIP_COMPANY_ID=edea9103-a49f-487f-901f-05b2753b965d
 
 # Auth

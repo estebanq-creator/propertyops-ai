@@ -55,9 +55,10 @@ export default function ReviewGate() {
   const fetchReviewQueue = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/landlord/review-queue');
+      setError(null);
+      const response = await fetch('/api/landlord/review-queue', { cache: 'no-store' });
       const data = await response.json();
-      if (data.success) {
+      if (response.ok && data.success) {
         setQueue(data);
       } else {
         setError(data.error || 'Failed to load review queue');
@@ -72,12 +73,13 @@ export default function ReviewGate() {
   const handleApprove = async (reportId: string) => {
     setProcessing(reportId);
     try {
+      setError(null);
       const response = await fetch(`/api/landlord/reports/${reportId}/approve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
       const data = await response.json();
-      if (data.success) {
+      if (response.ok && data.success) {
         // Refresh queue
         await fetchReviewQueue();
       } else {
@@ -93,13 +95,14 @@ export default function ReviewGate() {
   const handleReject = async (reportId: string, reason?: string) => {
     setProcessing(reportId);
     try {
+      setError(null);
       const response = await fetch(`/api/landlord/reports/${reportId}/reject`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: reason || 'Not specified' }),
       });
       const data = await response.json();
-      if (data.success) {
+      if (response.ok && data.success) {
         await fetchReviewQueue();
       } else {
         setError(data.error || 'Failed to reject report');

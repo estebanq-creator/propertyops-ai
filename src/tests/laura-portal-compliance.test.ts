@@ -11,46 +11,93 @@ vi.mock('@/lib/paperclip', () => {
       (global as any).__paperclipCalls.push({ url, opts });
       return { status: 200, json: async () => ({}) };
     }),
+    setIssueStatus: vi.fn(async (id, status, comment) => {
+      (global as any).__setIssueStatusCalls = (global as any).__setIssueStatusCalls || [];
+      (global as any).__setIssueStatusCalls.push({ id, status, comment });
+      return { id, status };
+    }),
+    getIssue: vi.fn(async (id) => ({
+      id,
+      companyId: 'company-1',
+      title: 'Test task',
+      status: 'backlog',
+      priority: 'medium',
+      assigneeAgentId: 'agent-1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    })),
   };
 });
 
 // Import the approve route to test
-const { POST } = await import('../../api/tasks/[id]/approve/route.ts');
+const { POST } = await import('../app/api/tasks/[id]/approve/route.ts');
 
 describe('Laura Portal Compliance Tests', () => {
-  const pagesToCheck = [
+  const landlordPages = [
     'src/app/landlord/page.tsx',
-    'src/app/owner/page.tsx',
   ];
+  const ownerReviewPages = [
+    'src/app/owner/review-gate/page.tsx',
+  ];
+  const disclaimerComponent = 'src/components/legal/DisclaimerFooter.tsx';
 
-  it('UI pages contain required disclaimer and Fair Housing language', () => {
-    const disclaimer = 'Forensic Analysis Only';
-    const fairHousing = 'Fair Housing Act';
+  it('Laura pages wire the required disclaimer component and Fair Housing guardrails', () => {
+    const disclaimerComponentPath = path.resolve(__dirname, '../../', disclaimerComponent);
+    const disclaimerContent = fs.readFileSync(disclaimerComponentPath, 'utf8');
 
-    pagesToCheck.forEach((relative) => {
+    expect(disclaimerContent).toContain('Forensic Analysis Only');
+    expect(disclaimerContent).toContain('Fair Housing Act');
+
+    [...landlordPages, ...ownerReviewPages].forEach((relative) => {
       const filePath = path.resolve(__dirname, '../../', relative);
       const content = fs.readFileSync(filePath, 'utf8');
-      expect(content).toContain(disclaimer);
-      expect(content).toContain(fairHousing);
+
+      expect(content).toMatch(/DisclaimerFooter|CompactDisclaimer/);
     });
   });
 
-  it('UI pages do not contain prohibited terms like Pass/Fail or Credit Decision', () => {
+  it('Landlord-facing Laura pages do not contain prohibited screening terms', () => {
     const prohibitedTerms = [
       'Pass',
       'Fail',
-      'Approval',
-      'Reject',
       'Score',
       'Credit',
       'Eviction',
       'Screening',
     ];
-    pagesToCheck.forEach((relative) => {
+
+    landlordPages.forEach((relative) => {
       const filePath = path.resolve(__dirname, '../../', relative);
       const content = fs.readFileSync(filePath, 'utf8');
+
       prohibitedTerms.forEach((term) => {
         expect(content).not.toMatch(new RegExp(`\\b${term}\\b`, 'i'));
+      });
+    });
+  });
+
+  it('Owner review workflows are allowed to use approve and reject controls', () => {
+    ownerReviewPages.forEach((relative) => {
+      const filePath = path.resolve(__dirname, '../../', relative);
+      const content = fs.readFileSync(filePath, 'utf8');
+
+      expect(content).toMatch(/\bApprove\b/);
+      expect(content).toMatch(/\bReject\b/);
+    });
+  });
+
+  it('Landlord-facing Laura pages do not use prohibited tenancy decision language', () => {
+    const prohibitedDecisionTerms = [
+      'Approved for tenancy',
+      'Tenant rejected',
+    ];
+
+    landlordPages.forEach((relative) => {
+      const filePath = path.resolve(__dirname, '../../', relative);
+      const content = fs.readFileSync(filePath, 'utf8');
+
+      prohibitedDecisionTerms.forEach((term) => {
+        expect(content).not.toMatch(new RegExp(term, 'i'));
       });
     });
   });

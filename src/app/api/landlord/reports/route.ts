@@ -12,10 +12,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { sampleReports } from '@/lib/landlord-seed';
-
-// In-memory store for demo (replace with database in production)
-const reportsStore = new Map(sampleReports.map(r => [r.id, r]));
+import { listReports } from '@/lib/landlord-review-store';
 
 export async function GET(request: NextRequest) {
   try {
@@ -25,7 +22,7 @@ export async function GET(request: NextRequest) {
     const landlordId = searchParams.get('landlordId') || 'landlord-001';
 
     // Get all reports for this landlord
-    const allReports = Array.from(reportsStore.values()).filter(
+    const allReports = listReports().filter(
       r => r.landlordId === landlordId
     );
 

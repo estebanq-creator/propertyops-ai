@@ -205,6 +205,10 @@ export async function getIssues(
   return paperclipRequest<PaperclipIssue[]>(endpoint);
 }
 
+export async function getIssue(issueId: string): Promise<PaperclipIssue> {
+  return paperclipRequest<PaperclipIssue>(`/issues/${issueId}`);
+}
+
 /**
  * Update a Paperclip issue by ID
  */
@@ -272,11 +276,14 @@ export function mapIssueToTask(issue: PaperclipIssue): {
     case 'completed':
       taskStatus = 'completed';
       break;
+    case 'failed':
+      taskStatus = 'failed';
+      break;
     case 'cancelled':
       taskStatus = 'rejected';
       break;
     case 'in_progress':
-      taskStatus = 'pending'; // Still pending completion
+      taskStatus = 'approved';
       break;
     default:
       taskStatus = 'pending';
@@ -303,6 +310,7 @@ export function mapIssueToTask(issue: PaperclipIssue): {
     id: issue.id,
     title: issue.title,
     status: taskStatus,
+    sourceStatus: issue.status,
     priority,
     assigneeAgentId: issue.assigneeAgentId,
     createdAt: issue.createdAt,
@@ -311,6 +319,48 @@ export function mapIssueToTask(issue: PaperclipIssue): {
     approvedBy: issue.completedAt ? 'System' : undefined,
     description: issue.description || issue.identifier,
   };
+}
+
+/**
+ * Fields that can be updated on an issue via PATCH /api/issues/{issueId}
+ */
+export interface PaperclipIssueUpdate {
+  status?: string;
+  priority?: string;
+  assigneeAgentId?: string | null;
+  title?: string;
+  description?: string;
+  comment?: string;
+}
+
+/**
+ * Update an issue by ID.
+ *
+ * Uses the direct /api/issues/:id path — company-scoped PATCH routes return 404.
+ */
+export async function updateIssue(
+  issueId: string,
+  update: PaperclipIssueUpdate
+): Promise<PaperclipIssue> {
+  return paperclipRequest<PaperclipIssue>(`/issues/${issueId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(update),
+  });
+}
+
+/**
+ * Convenience: move an issue to a new status.
+ *
+ * @param issueId  The issue UUID (not the human identifier like "PRO-14").
+ * @param status   Target status, e.g. "backlog", "in_progress", "done".
+ * @param comment  Optional comment to attach to the transition.
+ */
+export async function setIssueStatus(
+  issueId: string,
+  status: string,
+  comment?: string
+): Promise<PaperclipIssue> {
+  return updateIssue(issueId, { status, ...(comment ? { comment } : {}) });
 }
 
 /**

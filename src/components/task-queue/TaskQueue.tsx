@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Task } from '@/types';
 
 export function TaskQueue() {
@@ -8,25 +8,29 @@ export function TaskQueue() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'completed'>('pending');
+  const [processingTaskId, setProcessingTaskId] = useState<string | null>(null);
+
+  const fetchTasks = useCallback(async () => {
+    try {
+      const response = await fetch('/api/tasks', { cache: 'no-store' });
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(data?.error || 'Failed to fetch tasks');
+      }
+      setTasks(data);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch('/api/tasks');
-        if (!response.ok) throw new Error('Failed to fetch tasks');
-        const data = await response.json();
-        setTasks(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTasks();
     const interval = setInterval(fetchTasks, 15000); // 15s refresh
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchTasks]);
 
   const filteredTasks = tasks.filter((task) =>
     filter === 'all' ? true : task.status === filter
@@ -38,18 +42,23 @@ export function TaskQueue() {
     }
     
     try {
+      setProcessingTaskId(taskId);
+      setError(null);
       const response = await fetch(`/api/tasks/${taskId}/approve`, {
         method: 'POST',
       });
-      if (!response.ok) throw new Error('Failed to approve task');
-      setTasks((prev) =>
-        prev.map((t) =>
-          t.id === taskId ? { ...t, status: 'approved', approvedAt: new Date().toISOString() } : t
-        )
-      );
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(data?.error || 'Failed to approve task');
+      }
+      await fetchTasks();
     } catch (err) {
       console.error('Approval failed:', err);
-      alert('Failed to approve task. Please try again.');
+      const message = err instanceof Error ? err.message : 'Failed to approve task. Please try again.';
+      setError(message);
+      alert(message);
+    } finally {
+      setProcessingTaskId(null);
     }
   };
 
@@ -59,16 +68,23 @@ export function TaskQueue() {
     }
     
     try {
+      setProcessingTaskId(taskId);
+      setError(null);
       const response = await fetch(`/api/tasks/${taskId}/reject`, {
         method: 'POST',
       });
-      if (!response.ok) throw new Error('Failed to reject task');
-      setTasks((prev) =>
-        prev.map((t) => (t.id === taskId ? { ...t, status: 'rejected' } : t))
-      );
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(data?.error || 'Failed to reject task');
+      }
+      await fetchTasks();
     } catch (err) {
       console.error('Rejection failed:', err);
-      alert('Failed to reject task. Please try again.');
+      const message = err instanceof Error ? err.message : 'Failed to reject task. Please try again.';
+      setError(message);
+      alert(message);
+    } finally {
+      setProcessingTaskId(null);
     }
   };
 
@@ -124,6 +140,14 @@ export function TaskQueue() {
               key={task.id}
               className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600"
             >
+              {(() => {
+                const approvalBlockedReason =
+                  task.status === 'pending' && !task.assigneeAgentId && !task.assigneeUserId
+                    ? 'Task must be assigned before approval.'
+                    : null;
+
+                return (
+                  <>
               <div className="flex items-start justify-between mb-2">
                 <div>
                   <h4 className="font-medium text-gray-900 dark:text-white">
@@ -151,6 +175,9 @@ export function TaskQueue() {
               <div className="flex items-center justify-between mt-3">
                 <div className="text-xs text-gray-500 dark:text-gray-400">
                   <span className="capitalize">{task.priority}</span> priority
+                  {task.sourceStatus && (
+                    <span className="ml-2">• {task.sourceStatus}</span>
+                  )}
                   {task.identifier && (
                     <span className="ml-2">• {task.identifier}</span>
                   )}
@@ -163,15 +190,18 @@ export function TaskQueue() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleApprove(task.id)}
+                      disabled={processingTaskId === task.id || Boolean(approvalBlockedReason)}
+                      title={approvalBlockedReason || undefined}
                       className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition"
                     >
-                      Approve
+                      {processingTaskId === task.id ? 'Working...' : 'Approve'}
                     </button>
                     <button
                       onClick={() => handleReject(task.id)}
+                      disabled={processingTaskId === task.id}
                       className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition"
                     >
-                      Reject
+                      {processingTaskId === task.id ? 'Working...' : 'Reject'}
                     </button>
                   </div>
                 )}
@@ -188,6 +218,14 @@ export function TaskQueue() {
                   </span>
                 )}
               </div>
+              {approvalBlockedReason && (
+                <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
+                  {approvalBlockedReason}
+                </p>
+              )}
+                  </>
+                );
+              })()}
             </div>
           ))
         )}

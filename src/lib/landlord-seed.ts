@@ -242,6 +242,8 @@ export interface ForensicReport {
 
 /**
  * Sample Reports for Testing - All start as pending_review
+ * Reports 1-5: Initial test batch (validated by CEO)
+ * Reports 6-25: Batches 2-5 for expedited review session
  */
 export const sampleReports: ForensicReport[] = [
   {
@@ -333,6 +335,687 @@ export const sampleReports: ForensicReport[] = [
       },
     ],
     createdAt: '2026-04-06T16:00:00Z',
+  },
+  // Batch 2 (Reports 6-10)
+  {
+    id: 'report-006',
+    landlordId: 'landlord-005',
+    propertyId: 'prop-008',
+    tenantName: 'Patricia Nguyen',
+    documentType: 'lease',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'template_mismatch',
+        severity: 'medium',
+        evidence: 'Lease clauses do not match California BAR standard form; missing required disclosure sections',
+        location: 'Sections 7-9, Pages 2-3',
+      },
+    ],
+    createdAt: '2026-04-07T08:00:00Z',
+  },
+  {
+    id: 'report-007',
+    landlordId: 'landlord-005',
+    propertyId: 'prop-009',
+    tenantName: 'Michael Torres',
+    documentType: 'id',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-07T09:00:00Z',
+  },
+  {
+    id: 'report-008',
+    landlordId: 'landlord-001',
+    propertyId: 'prop-001',
+    tenantName: 'Susan Park',
+    documentType: 'bank_statement',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'text_alteration',
+        severity: 'high',
+        evidence: 'Account balance field shows pixel-level evidence of digital editing',
+        location: 'Balance summary section, Page 1',
+      },
+    ],
+    createdAt: '2026-04-07T10:00:00Z',
+  },
+  {
+    id: 'report-009',
+    landlordId: 'landlord-003',
+    propertyId: 'prop-005',
+    tenantName: 'Carlos Mendez',
+    documentType: 'paystub',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'metadata_inconsistency',
+        severity: 'low',
+        evidence: 'PDF creation timestamp 2 hours after document date (explainable by end-of-day processing)',
+        location: 'Document metadata',
+      },
+    ],
+    createdAt: '2026-04-07T11:00:00Z',
+  },
+  {
+    id: 'report-010',
+    landlordId: 'landlord-002',
+    propertyId: 'prop-003',
+    tenantName: 'Angela White',
+    documentType: 'employment_letter',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'signature_anomaly',
+        severity: 'medium',
+        evidence: 'Digital signature present but certificate chain incomplete',
+        location: 'Signature block, bottom of letter',
+      },
+    ],
+    createdAt: '2026-04-07T12:00:00Z',
+  },
+  // Batch 3 (Reports 11-15)
+  {
+    id: 'report-011',
+    landlordId: 'landlord-004',
+    propertyId: 'prop-007',
+    tenantName: 'Kevin Brown',
+    documentType: 'id',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'image_manipulation_detected',
+        severity: 'high',
+        evidence: 'ELA analysis reveals photo region has different compression history than document background',
+        location: 'Photo area, entire quadrant',
+      },
+    ],
+    createdAt: '2026-04-07T13:00:00Z',
+  },
+  {
+    id: 'report-012',
+    landlordId: 'landlord-002',
+    propertyId: 'prop-003',
+    tenantName: 'Rachel Green',
+    documentType: 'lease',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-07T14:00:00Z',
+  },
+  {
+    id: 'report-013',
+    landlordId: 'landlord-001',
+    propertyId: 'prop-002',
+    tenantName: 'Daniel Martinez',
+    documentType: 'employment_letter',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'template_mismatch',
+        severity: 'medium',
+        evidence: 'Company letterhead format differs from public records; font and logo placement inconsistent',
+        location: 'Header section, entire page',
+      },
+    ],
+    createdAt: '2026-04-07T15:00:00Z',
+  },
+  {
+    id: 'report-014',
+    landlordId: 'landlord-005',
+    propertyId: 'prop-008',
+    tenantName: 'Lisa Anderson',
+    documentType: 'paystub',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'font_variation',
+        severity: 'low',
+        evidence: 'Two similar but not identical font renderings in earnings section',
+        location: 'Earnings breakdown, Page 1',
+      },
+    ],
+    createdAt: '2026-04-07T16:00:00Z',
+  },
+  {
+    id: 'report-015',
+    landlordId: 'landlord-003',
+    propertyId: 'prop-006',
+    tenantName: 'Thomas Wright',
+    documentType: 'bank_statement',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-07T17:00:00Z',
+  },
+  // Batch 4 (Reports 16-20)
+  {
+    id: 'report-016',
+    landlordId: 'landlord-002',
+    propertyId: 'prop-003',
+    tenantName: 'Nancy Clark',
+    documentType: 'id',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'qr_code_invalid',
+        severity: 'medium',
+        evidence: '2D barcode on ID fails validation check; does not decode to expected data',
+        location: 'Back of ID, QR code region',
+      },
+    ],
+    createdAt: '2026-04-08T08:00:00Z',
+  },
+  {
+    id: 'report-017',
+    landlordId: 'landlord-004',
+    propertyId: 'prop-007',
+    tenantName: 'Steven Hall',
+    documentType: 'paystub',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'text_alteration',
+        severity: 'high',
+        evidence: 'Gross pay field shows evidence of digital modification',
+        location: 'Pay summary section, Page 1',
+      },
+      {
+        type: 'metadata_inconsistency',
+        severity: 'medium',
+        evidence: 'PDF properties indicate different source application than claimed payroll provider',
+        location: 'Document metadata',
+      },
+    ],
+    createdAt: '2026-04-08T09:00:00Z',
+  },
+  {
+    id: 'report-018',
+    landlordId: 'landlord-005',
+    propertyId: 'prop-009',
+    tenantName: 'Karen Lewis',
+    documentType: 'lease',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-08T10:00:00Z',
+  },
+  {
+    id: 'report-019',
+    landlordId: 'landlord-001',
+    propertyId: 'prop-001',
+    tenantName: 'Brian Young',
+    documentType: 'bank_statement',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'microprint_degraded',
+        severity: 'low',
+        evidence: 'Microprint text shows reproduction artifacts consistent with scanning',
+        location: 'Security border, Page 1',
+      },
+    ],
+    createdAt: '2026-04-08T11:00:00Z',
+  },
+  {
+    id: 'report-020',
+    landlordId: 'landlord-003',
+    propertyId: 'prop-004',
+    tenantName: 'Michelle King',
+    documentType: 'id',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'shadow_inconsistency',
+        severity: 'medium',
+        evidence: 'Lighting analysis suggests photo region has different light source angle than document',
+        location: 'Photo area and surrounding laminate',
+      },
+    ],
+    createdAt: '2026-04-08T12:00:00Z',
+  },
+  // Batch 5 (Reports 21-25)
+  {
+    id: 'report-021',
+    landlordId: 'landlord-004',
+    propertyId: 'prop-007',
+    tenantName: 'Christopher Scott',
+    documentType: 'employment_letter',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'signature_anomaly',
+        severity: 'high',
+        evidence: 'Digital signature certificate expired 6 months before document date',
+        location: 'Signature block',
+      },
+      {
+        type: 'template_mismatch',
+        severity: 'medium',
+        evidence: 'Letterhead format does not match employer\'s verified template',
+        location: 'Header section',
+      },
+    ],
+    createdAt: '2026-04-08T13:00:00Z',
+  },
+  {
+    id: 'report-022',
+    landlordId: 'landlord-002',
+    propertyId: 'prop-003',
+    tenantName: 'Amanda Adams',
+    documentType: 'paystub',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-08T14:00:00Z',
+  },
+  {
+    id: 'report-023',
+    landlordId: 'landlord-005',
+    propertyId: 'prop-008',
+    tenantName: 'Joshua Baker',
+    documentType: 'bank_statement',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'edge_artifacts',
+        severity: 'medium',
+        evidence: 'Cut/paste detection around account number and balance fields',
+        location: 'Account summary section, Page 1',
+      },
+    ],
+    createdAt: '2026-04-08T15:00:00Z',
+  },
+  {
+    id: 'report-024',
+    landlordId: 'landlord-001',
+    propertyId: 'prop-002',
+    tenantName: 'Stephanie Nelson',
+    documentType: 'lease',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'font_variation',
+        severity: 'low',
+        evidence: 'Minor font rendering differences in standard clauses',
+        location: 'Pages 2-3, boilerplate sections',
+      },
+    ],
+    createdAt: '2026-04-08T16:00:00Z',
+  },
+  {
+    id: 'report-025',
+    landlordId: 'landlord-003',
+    propertyId: 'prop-005',
+    tenantName: 'Andrew Carter',
+    documentType: 'paystub',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-08T17:00:00Z',
+  },
+  // Batch 6 (Reports 26-30)
+  {
+    id: 'report-026',
+    landlordId: 'landlord-004',
+    propertyId: 'prop-007',
+    tenantName: 'Elizabeth Turner',
+    documentType: 'lease',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'template_mismatch',
+        severity: 'medium',
+        evidence: 'Lease terms deviate from standard California BAR form; unusual clause structure',
+        location: 'Sections 3-5, Pages 1-2',
+      },
+    ],
+    createdAt: '2026-04-09T08:00:00Z',
+  },
+  {
+    id: 'report-027',
+    landlordId: 'landlord-005',
+    propertyId: 'prop-008',
+    tenantName: 'William Harris',
+    documentType: 'id',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-09T09:00:00Z',
+  },
+  {
+    id: 'report-028',
+    landlordId: 'landlord-001',
+    propertyId: 'prop-001',
+    tenantName: 'Sophia Martinez',
+    documentType: 'paystub',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'text_alteration',
+        severity: 'high',
+        evidence: 'Hourly rate field shows pixel-level evidence of digital modification',
+        location: 'Rate section, Page 1',
+      },
+    ],
+    createdAt: '2026-04-09T10:00:00Z',
+  },
+  {
+    id: 'report-029',
+    landlordId: 'landlord-003',
+    propertyId: 'prop-006',
+    tenantName: 'Oliver Thompson',
+    documentType: 'bank_statement',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'metadata_inconsistency',
+        severity: 'low',
+        evidence: 'Statement generation time inconsistent with bank processing schedule',
+        location: 'Document metadata',
+      },
+    ],
+    createdAt: '2026-04-09T11:00:00Z',
+  },
+  {
+    id: 'report-030',
+    landlordId: 'landlord-002',
+    propertyId: 'prop-003',
+    tenantName: 'Emma Robinson',
+    documentType: 'employment_letter',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'signature_anomaly',
+        severity: 'medium',
+        evidence: 'Signature timestamp predates certificate validity period',
+        location: 'Signature block, bottom of letter',
+      },
+    ],
+    createdAt: '2026-04-09T12:00:00Z',
+  },
+  // Batch 7 (Reports 31-35)
+  {
+    id: 'report-031',
+    landlordId: 'landlord-004',
+    propertyId: 'prop-007',
+    tenantName: 'Liam Walker',
+    documentType: 'id',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'image_manipulation_detected',
+        severity: 'high',
+        evidence: 'Photo region shows different noise pattern than document background',
+        location: 'Photo area, top-left quadrant',
+      },
+    ],
+    createdAt: '2026-04-09T13:00:00Z',
+  },
+  {
+    id: 'report-032',
+    landlordId: 'landlord-002',
+    propertyId: 'prop-003',
+    tenantName: 'Ava Phillips',
+    documentType: 'lease',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-09T14:00:00Z',
+  },
+  {
+    id: 'report-033',
+    landlordId: 'landlord-001',
+    propertyId: 'prop-002',
+    tenantName: 'Noah Campbell',
+    documentType: 'paystub',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'font_variation',
+        severity: 'low',
+        evidence: 'Deductions section uses different font rendering than earnings section',
+        location: 'Page 1, lower half',
+      },
+    ],
+    createdAt: '2026-04-09T15:00:00Z',
+  },
+  {
+    id: 'report-034',
+    landlordId: 'landlord-005',
+    propertyId: 'prop-009',
+    tenantName: 'Isabella Evans',
+    documentType: 'bank_statement',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-09T16:00:00Z',
+  },
+  {
+    id: 'report-035',
+    landlordId: 'landlord-003',
+    propertyId: 'prop-004',
+    tenantName: 'Ethan Edwards',
+    documentType: 'employment_letter',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'template_mismatch',
+        severity: 'medium',
+        evidence: 'Company logo resolution and positioning inconsistent with verified materials',
+        location: 'Header section',
+      },
+    ],
+    createdAt: '2026-04-09T17:00:00Z',
+  },
+  // Batch 8 (Reports 36-40)
+  {
+    id: 'report-036',
+    landlordId: 'landlord-004',
+    propertyId: 'prop-007',
+    tenantName: 'Mia Collins',
+    documentType: 'lease',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'signature_anomaly',
+        severity: 'high',
+        evidence: 'Digital signature certificate revoked before lease execution date',
+        location: 'Signature block, Page 3',
+      },
+    ],
+    createdAt: '2026-04-10T08:00:00Z',
+  },
+  {
+    id: 'report-037',
+    landlordId: 'landlord-002',
+    propertyId: 'prop-003',
+    tenantName: 'Alexander Stewart',
+    documentType: 'id',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'qr_code_invalid',
+        severity: 'medium',
+        evidence: 'Barcode data structure malformed; fails checksum validation',
+        location: 'Back of ID, barcode region',
+      },
+    ],
+    createdAt: '2026-04-10T09:00:00Z',
+  },
+  {
+    id: 'report-038',
+    landlordId: 'landlord-001',
+    propertyId: 'prop-001',
+    tenantName: 'Charlotte Morris',
+    documentType: 'paystub',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-10T10:00:00Z',
+  },
+  {
+    id: 'report-039',
+    landlordId: 'landlord-005',
+    propertyId: 'prop-008',
+    tenantName: 'James Rogers',
+    documentType: 'bank_statement',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'microprint_degraded',
+        severity: 'low',
+        evidence: 'Security microprint shows scanning artifacts; consistent with legitimate copy',
+        location: 'Document border, Page 1',
+      },
+    ],
+    createdAt: '2026-04-10T11:00:00Z',
+  },
+  {
+    id: 'report-040',
+    landlordId: 'landlord-003',
+    propertyId: 'prop-005',
+    tenantName: 'Benjamin Reed',
+    documentType: 'employment_letter',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-10T12:00:00Z',
+  },
+  // Batch 9 (Reports 41-45)
+  {
+    id: 'report-041',
+    landlordId: 'landlord-004',
+    propertyId: 'prop-007',
+    tenantName: 'Amelia Cook',
+    documentType: 'id',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'shadow_inconsistency',
+        severity: 'medium',
+        evidence: 'Lighting direction on photo differs from document laminate shadows',
+        location: 'Photo area and surrounding regions',
+      },
+    ],
+    createdAt: '2026-04-10T13:00:00Z',
+  },
+  {
+    id: 'report-042',
+    landlordId: 'landlord-002',
+    propertyId: 'prop-003',
+    tenantName: 'Henry Bailey',
+    documentType: 'lease',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'text_alteration',
+        severity: 'high',
+        evidence: 'Security deposit amount shows evidence of digital alteration',
+        location: 'Section 2.1, Page 1',
+      },
+    ],
+    createdAt: '2026-04-10T14:00:00Z',
+  },
+  {
+    id: 'report-043',
+    landlordId: 'landlord-001',
+    propertyId: 'prop-002',
+    tenantName: 'Evelyn Rivera',
+    documentType: 'paystub',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-10T15:00:00Z',
+  },
+  {
+    id: 'report-044',
+    landlordId: 'landlord-005',
+    propertyId: 'prop-009',
+    tenantName: 'Sebastian Cooper',
+    documentType: 'bank_statement',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'edge_artifacts',
+        severity: 'medium',
+        evidence: 'Edge detection reveals potential region replacement in transaction history',
+        location: 'Transaction table, Page 2',
+      },
+    ],
+    createdAt: '2026-04-10T16:00:00Z',
+  },
+  {
+    id: 'report-045',
+    landlordId: 'landlord-003',
+    propertyId: 'prop-006',
+    tenantName: 'Harper Morgan',
+    documentType: 'employment_letter',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'font_variation',
+        severity: 'low',
+        evidence: 'Body text shows minor font rendering inconsistencies',
+        location: 'Pages 1-2, paragraphs 3-5',
+      },
+    ],
+    createdAt: '2026-04-10T17:00:00Z',
+  },
+  // Batch 10 (Reports 46-50) — Final Validation
+  {
+    id: 'report-046',
+    landlordId: 'landlord-004',
+    propertyId: 'prop-007',
+    tenantName: 'Lucas Bennett',
+    documentType: 'lease',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-11T08:00:00Z',
+  },
+  {
+    id: 'report-047',
+    landlordId: 'landlord-002',
+    propertyId: 'prop-003',
+    tenantName: 'Abigail Powell',
+    documentType: 'id',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-11T09:00:00Z',
+  },
+  {
+    id: 'report-048',
+    landlordId: 'landlord-001',
+    propertyId: 'prop-001',
+    tenantName: 'Jackson Hughes',
+    documentType: 'paystub',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'metadata_inconsistency',
+        severity: 'medium',
+        evidence: 'PDF producer application differs from claimed payroll system',
+        location: 'Document metadata',
+      },
+    ],
+    createdAt: '2026-04-11T10:00:00Z',
+  },
+  {
+    id: 'report-049',
+    landlordId: 'landlord-005',
+    propertyId: 'prop-008',
+    tenantName: 'Ella Foster',
+    documentType: 'bank_statement',
+    status: 'pending_review',
+    anomalies: [], // Clean
+    createdAt: '2026-04-11T11:00:00Z',
+  },
+  {
+    id: 'report-050',
+    landlordId: 'landlord-003',
+    propertyId: 'prop-004',
+    tenantName: 'Caleb Russell',
+    documentType: 'employment_letter',
+    status: 'pending_review',
+    anomalies: [
+      {
+        type: 'signature_anomaly',
+        severity: 'high',
+        evidence: 'Signature certificate chain incomplete; issuer not in trust store',
+        location: 'Signature block, bottom of letter',
+      },
+    ],
+    createdAt: '2026-04-11T12:00:00Z',
   },
 ];
 

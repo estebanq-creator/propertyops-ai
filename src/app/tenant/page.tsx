@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { TonyDisclaimerFooter } from '@/components/legal/DisclaimerFooter';
+import { TenantMessagesPanel } from '@/components/tenant/TenantMessagesPanel';
 
 type View = 'dashboard' | 'maintenance' | 'status';
 
@@ -56,56 +58,9 @@ export default function TenantDashboard() {
               Maintenance Requests
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Submit and track maintenance requests for your unit.
+              Draft and track maintenance requests for your unit. Nothing is sent until it is approved.
             </p>
-            
-            {/* New Request Form Placeholder */}
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-6">
-              <h3 className="font-medium text-gray-900 dark:text-white mb-3">
-                Submit New Request
-              </h3>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">
-                    Issue Type
-                  </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                    <option>Select an issue type...</option>
-                    <option>Plumbing</option>
-                    <option>Electrical</option>
-                    <option>Appliance</option>
-                    <option>HVAC</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    rows={3}
-                    placeholder="Describe the issue..."
-                  />
-                </div>
-                <button
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition"
-                  disabled
-                >
-                  Submit Request (Coming Soon)
-                </button>
-              </div>
-            </div>
-            
-            {/* Request History */}
-            <div>
-              <h3 className="font-medium text-gray-900 dark:text-white mb-3">
-                Request History
-              </h3>
-              <div className="text-gray-500 dark:text-gray-400 text-sm text-center py-8">
-                No maintenance requests yet
-              </div>
-            </div>
+            <TenantMessagesPanel />
           </section>
         );
       
@@ -258,12 +213,7 @@ export default function TenantDashboard() {
         {renderView()}
       </div>
 
-      {/* Footer */}
-      <footer className="mt-8 py-6 border-t border-gray-200 dark:border-gray-700">
-        <div className="container mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400">
-          PropertyOps AI • Tony Portal • Phase 3 RBAC • © {new Date().getFullYear()}
-        </div>
-      </footer>
+      <TonyDisclaimerFooter />
     </main>
   );
 }

@@ -6,8 +6,9 @@ import { TaskQueue } from '@/components/task-queue/TaskQueue';
 import { CronJobs } from '@/components/cron-jobs/CronJobs';
 import { AuditLog } from '@/components/audit-log/AuditLog';
 import { Notifications } from '@/components/notifications/Notifications';
+import { TonyApprovalQueue } from '@/components/owner/TonyApprovalQueue';
 
-type View = 'dashboard' | 'tasks' | 'cron' | 'audit' | 'notifications';
+type View = 'dashboard' | 'tasks' | 'approvals' | 'cron' | 'audit' | 'notifications';
 
 export default function OwnerDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -16,6 +17,7 @@ export default function OwnerDashboard() {
   const navItems: { id: View; label: string }[] = [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'tasks', label: 'Tasks' },
+    { id: 'approvals', label: 'Approvals' },
     { id: 'cron', label: 'Cron Jobs' },
     { id: 'audit', label: 'Audit Log' },
     { id: 'notifications', label: 'Notifications' },
@@ -38,6 +40,12 @@ export default function OwnerDashboard() {
               </h2>
               <TaskQueue />
             </section>
+            <section className="lg:col-span-2">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+                Tony Approval Queue
+              </h2>
+              <TonyApprovalQueue />
+            </section>
           </div>
         );
       case 'tasks':
@@ -47,6 +55,15 @@ export default function OwnerDashboard() {
               Task Queue
             </h2>
             <TaskQueue />
+          </section>
+        );
+      case 'approvals':
+        return (
+          <section>
+            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+              Tony Approval Queue
+            </h2>
+            <TonyApprovalQueue />
           </section>
         );
       case 'cron':
