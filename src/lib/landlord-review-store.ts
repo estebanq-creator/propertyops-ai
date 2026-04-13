@@ -11,6 +11,7 @@ export interface ReviewAuditEntry {
 
 export type MutableForensicReport = ForensicReport & {
   rejectionReason?: string;
+  submitterEmail?: string;
 };
 
 interface LandlordReviewStore {
@@ -157,4 +158,9 @@ export function getReviewGateMeta(reports = listReports()) {
 
 export function getAuditLog() {
   return [...getStore().auditLog];
+}
+
+export function addReport(report: Omit<MutableForensicReport, never>): void {
+  const store = getStore();
+  store.reports.set(report.id, { ...report });
 }
