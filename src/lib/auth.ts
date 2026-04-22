@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { UserRole } from '@/types';
+import { landlords } from '@/lib/landlord-seed';
 
 // Extended user type with RBAC fields
 interface ExtendedUser {
@@ -22,15 +23,33 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        // TODO: Replace with actual auth against Paperclip API or user store
-        // For now, accept any non-empty credentials for development
         if (credentials?.email && credentials?.password) {
+          const email = credentials.email as string;
+
+          // Route to landlord session if email matches a seed account
+          const landlord = landlords.find(
+            (l) => l.email.toLowerCase() === email.toLowerCase()
+          );
+
+          if (landlord) {
+            const user: ExtendedUser = {
+              id: landlord.id,
+              email: landlord.email,
+              name: landlord.name,
+              role: 'landlord',
+              propertyIds: landlord.propertyIds,
+              landlordId: landlord.id,
+            };
+            return user;
+          }
+
+          // Fallback: owner (David and any non-landlord email)
           const user: ExtendedUser = {
             id: '1',
-            email: credentials.email as string,
-            name: credentials.email as string,
+            email,
+            name: email,
             role: 'owner',
-            propertyIds: [], // Owner has access to all, no need to list
+            propertyIds: [],
             landlordId: undefined,
           };
           return user;
